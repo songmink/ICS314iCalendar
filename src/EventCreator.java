@@ -27,9 +27,10 @@ public class EventCreator {
 	private static String eCreated = "CREATED:"; 	/* Event created date time */
 	private static String eLastMod = "LAST-MODIFIED:";	/* Event last modify date time */ 
 	private static String dtStamp = "DTSTAMP:";	/* Calendar date time stamp */
+	private static String cUid = "UID:";				/* Calendar uid */
 	
 	/*
-	 * Possible user input data 14 items
+	 * Possible user input data 13 items
 	 */
 	private static String cScale = "CALSCALE:";			/* Calendar scale */
 	private static String cName = "X-WR-CALNAME:";		/* Calendar name */
@@ -37,14 +38,15 @@ public class EventCreator {
 	private static String dtZone = "X-WR-TIMEZONE:";	/* User date time zone */	
 	private static String dtStart = "DTSTART:";			/* Event start date time */
 	private static String dtEnd = "DTEND:";				/* Event end date time */
-	private static String cUid = "UID:";				/* Calendar uid */
 	private static String eMethod = "METHOD:"; 			/* Event method */	
 	private static String eDesc = "DESCRIPTION:";		/* Event description */
 	private static String eSeq = "SEQUENCE:";			/* Event sequence */
 	private static String eStatus ="STATUS:";			/* Event status */
 	private static String eSummary = "SUMMARY:";		/* Event summary */
 	private static String eLocation = "LOCATION:";		/* Event location */
-	private static String eGeo = "GEO:";				/* Event geo */
+	//private static String eGeo = "GEO:";				/* Event geo */
+	
+	private static String fileName = "NewEvent";			/* default file name */
 
 	/**
 	 * Run this
@@ -54,7 +56,63 @@ public class EventCreator {
 		
 		/*  static but can modify from user input */
 		cScale += "GREGORIAN";
+		dtZone += "HONOLULU";
+		eMethod +="PUBLIC";
+		eStatus += "";
+		//eGeo += "";
 		
+		/* 
+		 * Read user data from command line
+		 * 
+		 * Evolve this!!
+		 * 
+		 */
+		System.out.print("Enter calendar name(Empty not allowed):");
+		cName += stringReader();
+		System.out.print("Enter calendar description(Empty not allowed):");
+		cDesc += stringReader();
+		System.out.print("Enter evnet summary for title(Empty not allowed):");
+		eSummary = stringReader();
+		
+		Boolean isDate = false;
+		while(!isDate) {
+			System.out.print("Enter event start dateyimr (mm/dd/yyyy):");
+			String temp = dateReader();
+			if(isDate = dateValid(temp)) {
+				dtStart += temp;
+			} else {
+				System.out.print("Please check the date again\n");
+			}
+		}		
+		/* add separator */
+		dtStart += "T";
+		
+		System.out.print("Enter event etart time(hh:mm):");
+		dtStart += timeReader();
+		
+		/* add end Z */
+		dtStart += "Z";
+		
+		System.out.print("Enter event end date(mm/dd/yyyy):");
+		dtEnd += intReader();
+		/* add separator */
+		dtEnd += "T";
+		System.out.print("Enter event end time(ex:2359):");
+		dtEnd += intReader();
+		/* add end Z */
+		dtEnd += "Z";
+		
+		System.out.print("Enter event description(Empty not allowed):");
+		eDesc = stringReader();
+		System.out.print("Enter the Sequence(Empty not allowed):");
+		eSeq += intReader();
+		
+		System.out.print("Enter Event Location(Empty not allowed):");
+		eLocation += stringReader();
+		
+		System.out.print("Enter Event File Name:");
+		fileName += stringReader();
+		icsNewEvent(fileName);
 		
 	}
 	
@@ -64,12 +122,12 @@ public class EventCreator {
 	 */
 	public static String stringReader() {
 		Scanner sc = new Scanner(System.in);
-		String userIn = "";
+		String userIn = null;
 		Boolean isEmpty = true;
 
 		while(isEmpty){
 			
-			if(userIn != "") {
+			if(userIn != null) {
 				isEmpty = false;
 			}
 		}
@@ -77,24 +135,68 @@ public class EventCreator {
 		return userIn;
 	}
 	
+	public static String dateReader() {
+		Scanner sc = new Scanner(System.in);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+		Boolean isEmpty = true;
+		String dateInput = null;
+		while(isEmpty) {
+			dateInput = sc.next();
+			if(dateInput != null) {
+				dateInput = dateInput.trim();
+				sc.close();
+				isEmpty = false;
+			}
+			System.out.print("Please enter the valid date");
+		}
+		
+		dateInput = dateInput.replace("/", "");
+		return dateInput;
+	}
+	
+	public static String timeReader() {
+		Scanner sc = new Scanner(System.in);
+		Boolean isEmpty = true;
+		String timeInput = null;
+		while(isEmpty) {
+			timeInput = sc.next();
+			if(timeInput != null) {
+				timeInput = timeInput.trim();
+				String[] hhmm = timeInput.split(":");
+				int hh = Integer.parseInt(hhmm[0]);
+				int mm = Integer.parseInt(hhmm[1]);
+				
+				/* check the time validation */
+				if(0 > hh || 23 < hh || 0 > mm || 59 < mm) {
+					isEmpty = true;
+					/* reset input data */
+					timeInput = null; 
+				} else {
+					isEmpty = false;
+				}
+			}
+			
+		}
+		sc.close();
+		
+		timeInput = timeInput.replace(":","");
+		return timeInput;
+	}
+	
 	/**
-	 * Read int user information from command line
+	 * Read integer user information from command line
 	 * @return userIn integer for user input integer data / empty not allowed
 	 */
-	public static String intReader() {
+	public static int intReader() {
 		Scanner sc = new Scanner(System.in);
-		String userIn = "";
+		int userIn = 1;
 		Boolean isEmpty = true;
 
 		while(isEmpty){
 			
 			/* read only integer */
 			while(!sc.hasNextInt()) {
-				userIn = sc.next();
-			}
-			
-			if(!userIn.isEmpty()) {
-				isEmpty = false;
+				userIn = sc.nextInt();
 			}
 		}
 		
@@ -118,9 +220,11 @@ public class EventCreator {
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			
+			/* Static DO NOT EARASE! */
+			bw.write(begin + "VCALENDAR" + "\n");
+			
 			// Each item can be disabled
 			// Unused item should be disabled
-			bw.write(begin + "VCALENDAR" + "\n");
 			bw.write(prodId + "\n");
 			bw.write(version + "\n");
 			bw.write(cScale + "n");
@@ -129,7 +233,11 @@ public class EventCreator {
 			bw.write(cName + "\n");
 			bw.write(cDesc + "\n");
 			
+			/* Static */
 			bw.write(begin + "VEVENT" + "\n");
+			
+			// Each item can be disabled
+			// Unused item should be disabled
 			bw.write(cUid + "\n");
 			bw.write(dtStart + "\n");
 			bw.write(dtEnd + "\n");
@@ -140,7 +248,9 @@ public class EventCreator {
 			bw.write(eStatus + "\n");
 			bw.write(dtStamp + "\n");
 			bw.write(eLastMod + "\n");
-			bw.write(eGeo + "\n");
+			//bw.write(eGeo + "\n");
+			
+			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
 			bw.write(end + "VCALENDAR" + "\n");
 		} catch (IOException e) {
@@ -170,10 +280,7 @@ public class EventCreator {
 	 * input dateValid
 	 * @return true valid otherwise false
 	 */
-	private boolean dateValid(SimpleDateFormat d) {
-		if(!true){
-			return false;
-		}
+	private static boolean dateValid(String d) {
 		
 		return true;
 	}
@@ -183,11 +290,10 @@ public class EventCreator {
 	 * start datetime must before end datetime
 	 * @return true valid otherwise fale
 	 */
-	private boolean startEndDatetimeValid(SimpleDateFormat dt) {
-		if(!true) {
-			return false;
-		}
+	private static boolean timeValid(SimpleDateFormat dt) {
+		
 		return true;
+		
 	}
 	
 }
