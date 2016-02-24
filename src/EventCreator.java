@@ -62,8 +62,7 @@ public class EventCreator {
 		//eGeo += "";
 		
 		/* 
-		 * Read user data from command line
-		 * 
+		 * Read event start date time
 		 * Evolve this!!
 		 * 
 		 */
@@ -76,9 +75,10 @@ public class EventCreator {
 		
 		Boolean isDate = false;
 		while(!isDate) {
-			System.out.print("Enter event start dateyimr (mm/dd/yyyy):");
+			System.out.print("Enter event start date (mm/dd/yyyy):");
 			String temp = dateReader();
-			if(isDate = dateValid(temp)) {
+			if(isValidDate(temp)) {
+				isDate = true;
 				dtStart += temp;
 			} else {
 				System.out.print("Please check the date again\n");
@@ -86,19 +86,31 @@ public class EventCreator {
 		}		
 		/* add separator */
 		dtStart += "T";
-		
-		System.out.print("Enter event etart time(hh:mm):");
+		System.out.println("Enter event start time(hh:mm)");
 		dtStart += timeReader();
-		
 		/* add end Z */
 		dtStart += "Z";
 		
-		System.out.print("Enter event end date(mm/dd/yyyy):");
-		dtEnd += intReader();
+		/* 
+		 * Read event end date time
+		 */
+		
+		isDate = false; /* Initial isDate as false for restart */
+		while(!isDate) {
+			System.out.print("Enter event start date (mm/dd/yyyy):");
+			String temp = dateReader();
+			if(isValidDate(temp)) {
+				isDate = true;
+				dtEnd += temp;
+			} else {
+				System.out.print("Please check the date again\n");
+			}
+		}
+
 		/* add separator */
 		dtEnd += "T";
-		System.out.print("Enter event end time(ex:2359):");
-		dtEnd += intReader();
+		System.out.println("Enter event end time(hh:mm)");
+		dtEnd += timeReader();
 		/* add end Z */
 		dtEnd += "Z";
 		
@@ -154,6 +166,10 @@ public class EventCreator {
 		return dateInput;
 	}
 	
+	/*
+	 * Time reader
+	 * @return String time with hhmm format 
+	 */
 	public static String timeReader() {
 		Scanner sc = new Scanner(System.in);
 		Boolean isEmpty = true;
@@ -163,23 +179,22 @@ public class EventCreator {
 			if(timeInput != null) {
 				timeInput = timeInput.trim();
 				String[] hhmm = timeInput.split(":");
+				
 				int hh = Integer.parseInt(hhmm[0]);
 				int mm = Integer.parseInt(hhmm[1]);
 				
-				/* check the time validation */
-				if(0 > hh || 23 < hh || 0 > mm || 59 < mm) {
-					isEmpty = true;
-					/* reset input data */
-					timeInput = null; 
-				} else {
+				if(isValidTime(hh,mm)) {
 					isEmpty = false;
+				} else {
+					timeInput = null;
 				}
+				
+			} else {
+				System.out.println("Plaese enter a valid time with the format.");
 			}
-			
 		}
 		sc.close();
 		
-		timeInput = timeInput.replace(":","");
 		return timeInput;
 	}
 	
@@ -277,23 +292,26 @@ public class EventCreator {
 	
 	//TODO first assign
 	/**
-	 * input dateValid
-	 * @return true valid otherwise false
+	 * Date validation
+	 * @return true if valid otherwise false
 	 */
-	private static boolean dateValid(String d) {
+	private static boolean isValidDate(String d) {
 		
 		return true;
 	}
 	
 	//TODO first assign
 	/** 
-	 * start datetime must before end datetime
-	 * @return true valid otherwise fale
+	 * Time validation
+	 * @return true if valid otherwise false
 	 */
-	private static boolean timeValid(SimpleDateFormat dt) {
+	private static boolean isValidTime(int hh, int mm) {
+		/* check the time validation */
+		if(0 > hh || 23 < hh || 0 > mm || 59 < mm) {
+			return false;
+		}
 		
 		return true;
-		
 	}
 	
 }
