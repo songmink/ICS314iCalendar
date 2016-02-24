@@ -1,6 +1,6 @@
 /**
  * RFC5545 Properties Interface
- * @author fairisle
+ * @author Songmin Kim
  *
  */
 public interface CalProperty {
