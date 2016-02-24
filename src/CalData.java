@@ -1,4 +1,8 @@
-
+/**
+ * Calendar data type
+ * @author Songmin Kim
+ *
+ */
 public abstract class CalData implements CalProperty{
 	/* Start calendar properties */
 	private static String begin = "BEGIN:";
