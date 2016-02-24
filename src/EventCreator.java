@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 /**
  * ICS 314 Spring 2016 iCalendar project 
@@ -14,98 +15,93 @@ import java.text.SimpleDateFormat;
  *
  */
 public class EventCreator {
-	/* Start calendar properties */
+	/* Start or end calendar properties */
 	private static String begin = "BEGIN:";
-	
-	/* End calendar */
 	private static String end = "END:";
 	
-	/* Program version */
-	private static String version = "VERSION:";
+	/* Program version and product id */
+	private static String version = "VERSION:1.0";
+	private static String prodId = "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
 	
-	/* Product ID */
-	private static String prodId = "PRODID:";
+	/* Auto input */
+	private static String eCreated = "CREATED:"; 	/* Event created date time */
+	private static String eLastMod = "LAST-MODIFIED:";	/* Event last modify date time */ 
+	private static String dtStamp = "DTSTAMP:";	/* Calendar date time stamp */
 	
-	/* Calendar scale */
-	private static String cScale = "CALSCALE:";
-	
-	/* Calendar name */
-	private static String cName = "X-WR-CALNAME:";
-	
-	/* Calendar description */
-	private static String cDesc = "X-WR-CALDESC:";
-	
-	/* User date time zone */	
-	private static String dtZone = "X-WR-TIMEZONE:";
-	
-	/* Event start date time */
-	private static String dtStart = "DTSTART:";
-	
-	/* Event end date time */
-	private static String dtEnd = "DTEND:";
-	
-	/* Calendar date time stamp */
-	private static String dtStamp = "DTSTAMP:";
-	
-	/* Calendar uid */
-	private static String cUid = "UID:";
-	
-	/* Event method */	
-	private static String eMethod = "METHOD:";
-	
-	/* Event created date time */
-	private static String eCreated = "CREATED:";
-	
-	/* Event last modify date time */ 
-	private static String eLastMod = "LAST-MODIFIED:";
-	
-	/* Event description */
-	private static String eDesc = "DESCRIPTION:";
-	
-	/* Event sequence */
-	private static String eSeq = "SEQUENCE:";
-	
-	/* Event status */
-	private static String eStatus ="STATUS:";
-	
-	/* Event summary */
-	private static String eSummary = "SUMMARY:";
-	
-	/* Event location */
-	private static String eLocation = "LOCATION:";
-	
-	/* Event geo */
-	private static String eGeo = "GEO:";
+	/*
+	 * Possible user input data 14 items
+	 */
+	private static String cScale = "CALSCALE:";			/* Calendar scale */
+	private static String cName = "X-WR-CALNAME:";		/* Calendar name */
+	private static String cDesc = "X-WR-CALDESC:";		/* Calendar description */
+	private static String dtZone = "X-WR-TIMEZONE:";	/* User date time zone */	
+	private static String dtStart = "DTSTART:";			/* Event start date time */
+	private static String dtEnd = "DTEND:";				/* Event end date time */
+	private static String cUid = "UID:";				/* Calendar uid */
+	private static String eMethod = "METHOD:"; 			/* Event method */	
+	private static String eDesc = "DESCRIPTION:";		/* Event description */
+	private static String eSeq = "SEQUENCE:";			/* Event sequence */
+	private static String eStatus ="STATUS:";			/* Event status */
+	private static String eSummary = "SUMMARY:";		/* Event summary */
+	private static String eLocation = "LOCATION:";		/* Event location */
+	private static String eGeo = "GEO:";				/* Event geo */
 
 	/**
 	 * Run this
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		prodInfoConst();
-		userInfoReader();
+		
+		/*  static but can modify from user input */
+		cScale += "GREGORIAN";
+		
 		
 	}
 	
 	/**
-	 * Product Information Constructor
+	 * Read string user information from command line
+	 * @return userIn string for user input string data / empty not allowed
 	 */
-	public static void prodInfoConst() {
-		 prodId += "-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
-		 version += "1.0";
-	}
-	
-	//TODO first assign
-	/**
-	 * Read user information from command line
-	 */
-	public static void userInfoReader() {
-		
-		while(true){
+	public static String stringReader() {
+		Scanner sc = new Scanner(System.in);
+		String userIn = "";
+		Boolean isEmpty = true;
+
+		while(isEmpty){
 			
+			if(userIn != "") {
+				isEmpty = false;
+			}
 		}
 		
+		return userIn;
 	}
+	
+	/**
+	 * Read int user information from command line
+	 * @return userIn integer for user input integer data / empty not allowed
+	 */
+	public static String intReader() {
+		Scanner sc = new Scanner(System.in);
+		String userIn = "";
+		Boolean isEmpty = true;
+
+		while(isEmpty){
+			
+			/* read only integer */
+			while(!sc.hasNextInt()) {
+				userIn = sc.next();
+			}
+			
+			if(!userIn.isEmpty()) {
+				isEmpty = false;
+			}
+		}
+		
+		return userIn;
+	}	
+	
+	
 	//TODO: Unused item should be disabled
 	/** 
 	 * Write a new event  
@@ -193,4 +189,5 @@ public class EventCreator {
 		}
 		return true;
 	}
+	
 }
