@@ -1,9 +1,13 @@
 
 import java.io.*;
 import java.util.Scanner;
+
+//TODO I think the class name "main" will be changed because 
 public class main {
-   public static void main(String[]args) {
+	//TODO  here "main" too 
+   public static void main(String[] args) { 
 	   System.out.println("This software is currently only meant for you to add only one event");
+	   
 	   /* Stores what the user enters*/
 	   String response;
 	   
@@ -44,8 +48,8 @@ public class main {
 			           System.out.print("Please enter the name of your calender: ");
 			           response = scan.nextLine();
 			           buffWriter.write("BEGIN:VCALENDAR\n" +
-						       "PRODID:-//Google Inc//Google Calendar 70.9054//EN\n" +
-							   "VERSION:2.0\n" +
+						       "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN" +
+							   "VERSION:1.0\n" +
 							   "CALSCALE:GREGORIAN\n" +
 							   "METHOD:PUBLISH\n" +
 							   "X-WR-CALNAME:" + response +"\n" +
