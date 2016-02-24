@@ -10,6 +10,12 @@ import java.util.Scanner;
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
  */
 
+/*******************************************************************************/
+/*                                                                             */
+/* Please write "// TODO name I want this" comment in head of class or method  */
+/*                                                                             */
+/*******************************************************************************/
+
 /**
  * iCalendar event creator
  *
