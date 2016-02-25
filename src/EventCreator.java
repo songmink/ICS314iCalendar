@@ -88,23 +88,31 @@ public class EventCreator {
 		
 		/* event start date */
 		System.out.print("Enter event start date(yyyy/mm/dd):");
-		dtStart += dateReader(sc);
+		String startDate = dateReader(sc);
+		dtStart += startDate;
+		
 		/* add separator */
 		dtStart += "T";
+		/* event start time */
 		System.out.print("Enter event start time(hh:mm)");
-		dtStart += timeReader(sc);
+		String startTime = timeReader(sc);
+		dtStart += startTime;
 		/* add end Z */
 		dtStart += "Z";
 		
 		/* Event end date */
 		System.out.print("Endter event end date(yyyy/mm/dd):");
-		dtEnd += dateReader(sc);
+		String endDate = dateReader(sc);
+		dtEnd += endDate;
 		/* add separator */
 		dtEnd += "T";
 		System.out.println("Enter event end time(hh:mm)");
-		dtEnd += timeReader(sc);
+		String endTime = timeReader(sc);
+		dtEnd += endTime;
 		/* add end Z */
 		dtEnd += "Z";
+		
+		/* Compare start datetime and end datetime */
 		
 		System.out.print("Enter event description(Empty not allowed):");
 		eDesc = stringReader(sc);
@@ -324,6 +332,7 @@ public class EventCreator {
 			}
 		}
 		
+		/* Intercalation */
 		if(m == 2) {
 			if( y%4 == 0 && y%100 != 0 && y%400 == 0) {
 				if(d < 0 || 30 < d) {
@@ -341,7 +350,7 @@ public class EventCreator {
 	
 	/** 
 	 * Time validation
-	 * @return true if valid otherwise false
+	 * @return boolean true if valid otherwise false
 	 */
 	private static boolean isValidTime(int h, int m) {
 		/* check the time validation */
@@ -349,6 +358,16 @@ public class EventCreator {
 			return false;
 		}	
 		return true;
+	}
+	
+	/**
+	 * Compare start and end datetime 
+	 * 
+	 * @return Boolean 
+	 */
+	private static boolean isVaildEvent(String sd, String st, String ed, String et){
+		return true;
+		
 	}
 	
 	/**
