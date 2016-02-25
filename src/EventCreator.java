@@ -2,7 +2,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,7 +36,7 @@ public class EventCreator {
 	private static String eCreated = "CREATED:"; 		/* Event created date time */
 	//private static String eLastMod = "LAST-MODIFIED:";	/* Event last modify date time */ 
 	//private static String dtStamp = "DTSTAMP:";			/* Calendar date time stamp */
-	private static String cUid = "UID:";				/* Calendar uid */
+	//private static String cUid = "UID:";				/* Calendar uid */
 	
 	/*
 	 * Possible user input data 13 items
@@ -63,6 +62,7 @@ public class EventCreator {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.print("Event creator start.");
 		
 		/*  static but can modify from user input */
 		cScale += "GREGORIAN";
@@ -79,6 +79,8 @@ public class EventCreator {
 		
 		/* open scanner */
 		Scanner sc = new Scanner(System.in);
+		
+		/* Iiput user calendar data*/
 		System.out.print("Enter calendar name(Empty not allowed):");
 		cName += stringReader(sc);
 		System.out.print("Enter calendar description(Empty not allowed):");
@@ -87,26 +89,26 @@ public class EventCreator {
 		eSummary += stringReader(sc);
 		
 		/* event start date */
-		System.out.print("Enter event start date(yyyy/mm/dd):");
+		System.out.print("Enter start ");
 		String startDate = dateReader(sc);
 		dtStart += startDate;
 		
 		/* add separator */
 		dtStart += "T";
 		/* event start time */
-		System.out.print("Enter event start time(hh:mm)");
+		System.out.print("Enter satar");
 		String startTime = timeReader(sc);
 		dtStart += startTime;
 		/* add end Z */
 		dtStart += "Z";
 		
 		/* Event end date */
-		System.out.print("Endter event end date(yyyy/mm/dd):");
+		System.out.print("Enter end ");
 		String endDate = dateReader(sc);
 		dtEnd += endDate;
 		/* add separator */
 		dtEnd += "T";
-		System.out.println("Enter event end time(hh:mm)");
+		System.out.println("Enter end ");
 		String endTime = timeReader(sc);
 		dtEnd += endTime;
 		/* add end Z */
@@ -115,7 +117,7 @@ public class EventCreator {
 		/* Compare start datetime and end datetime */
 		
 		System.out.print("Enter event description(Empty not allowed):");
-		eDesc = stringReader(sc);
+		eDesc += stringReader(sc);
 		//System.out.print("Enter the Sequence(Empty not allowed):");
 		//eSeq += intReader();
 		
@@ -123,11 +125,12 @@ public class EventCreator {
 		eLocation += stringReader(sc);
 		
 		System.out.print("Enter Event File Name:");
-		fileName += stringReader(sc);
+		fileName = stringReader(sc);
 		
 		sc.close();
 		eCreated += currentDate();
 		icsNewEvent(fileName);
+		System.out.print("The " + fileName + " event is created.\n Program End.");
 	}
 	
 	/**
@@ -140,7 +143,7 @@ public class EventCreator {
 		Boolean isEmpty = true;
 		
 		while(isEmpty){
-			userIn = sc.nextLine();
+			userIn = sc.next();
 			if(userIn != null) {
 				isEmpty = false;
 			}
@@ -157,6 +160,7 @@ public class EventCreator {
 		Boolean isEmpty = true;
 		String dateInput = null;
 		while(isEmpty) {
+			System.out.print("event date(yyyy/mm/dd):");
 			dateInput = sc.next();
 			
 			if(dateInput != null) {
@@ -168,9 +172,10 @@ public class EventCreator {
 				} else {
 					/* Reset input data */
 					dateInput = null;
+					System.out.print("- The date you input is not valid! -\n- Please enter a valid ");
 				}
 			} else {
-				System.out.print("Please enter the valid date");
+				System.out.print("- The date you input is not valid! -\n- Please enter the valid ");
 			}
 		}
 		dateInput = dateInput.replace("/", "");
@@ -185,22 +190,18 @@ public class EventCreator {
 		Boolean isEmpty = true;
 		String timeInput = null;
 		while(isEmpty) {
+			System.out.print("event time(hh:mm):");
 			timeInput = sc.next();
-			if(timeInput != null) {
-				timeInput = timeInput.trim();
-				String[] hm = timeInput.split(":");
-				
-				int h = Integer.parseInt(hm[0]);
-				int m = Integer.parseInt(hm[1]);
-				
-				if(isValidTime(h,m)) {
+			if(timeInput != null) {				
+				if(isValidTime(timeInput)) {
 					isEmpty = false;
 				} else {
 					timeInput = null;
+					System.out.print("- Tha time you input is not valid! -\n- Please enter a valid ");
 				}
 				
 			} else {
-				System.out.println("Plaese enter a valid time with the format.");
+				System.out.print("- The time you input is not valid! -\n- Plaese enter a valid");
 			}
 		}		
 		return timeInput;
@@ -247,7 +248,7 @@ public class EventCreator {
 			// Unused item should be disabled
 			bw.write(prodId + "\n");
 			bw.write(version + "\n");
-			bw.write(cScale + "n");
+			bw.write(cScale + "\n");
 			bw.write(eMethod + "\n");
 			bw.write(dtZone + "\n");
 			bw.write(cName + "\n");
@@ -258,7 +259,7 @@ public class EventCreator {
 			
 			// Each item can be disabled
 			// Unused item should be disabled
-			bw.write(cUid + "\n");
+			//bw.write(cUid + "\n");
 			bw.write(dtStart + "\n");
 			bw.write(dtEnd + "\n");
 			bw.write(eDesc + "\n");
@@ -306,7 +307,9 @@ public class EventCreator {
 		date = date.trim();
 		
 		String[] ymd  = date.split("/");
-		
+		if(ymd.length != 3 ) {
+			return false;
+		}
 		int y = Integer.parseInt(ymd[0]);
 		int m = Integer.parseInt(ymd[1]);
 		int d = Integer.parseInt(ymd[2]);
@@ -352,7 +355,16 @@ public class EventCreator {
 	 * Time validation
 	 * @return boolean true if valid otherwise false
 	 */
-	private static boolean isValidTime(int h, int m) {
+	private static boolean isValidTime(String t) {
+		t = t.trim();
+		String[] hm = t.split(":");
+		
+		if(hm.length != 2) {
+			return false;
+		}
+		
+		int h = Integer.parseInt(hm[0]);
+		int m = Integer.parseInt(hm[1]);
 		/* check the time validation */
 		if(0 > h || 23 < h || 0 > m || 59 < m) {
 			return false;
@@ -372,7 +384,6 @@ public class EventCreator {
 	
 	/**
 	 * Current date
-	 * 
 	 * @return String yyyymmdd
 	 */
 	
