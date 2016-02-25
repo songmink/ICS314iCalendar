@@ -55,6 +55,7 @@ public class EventCreator {
 	private static String eSummary = "SUMMARY:";		/* Event summary */
 	private static String eLocation = "LOCATION:";		/* Event location */
 	//private static String eGeo = "GEO:";				/* Event geo */
+	//private static Stirng eClass = "CLASS:"			/* Event Classification */
 	
 	private static String fileName = "NewEvent";		/* default file name */
 
@@ -128,7 +129,7 @@ public class EventCreator {
 		eLocation += stringReader(sc);
 		
 		System.out.print("Enter Event File Name:");
-		fileName = stringReader(sc);
+		fileName = stringReader(sc) + currentDate();
 		
 		sc.close();
 		eCreated += currentDate();
