@@ -326,7 +326,7 @@ public class EventCreator {
 			return false;
 		}
 		
-		/* day 31  or 30*/
+		/* day 31 or 30 */
 		if(m == 4 || m == 6 || m == 9 || m == 11) {
 			if(d < 0 || 30 < d) {
 				return false;
@@ -432,9 +432,10 @@ public class EventCreator {
 	 */
 	
 	private static String currentDate(){
-		SimpleDateFormat df = new SimpleDateFormat("yyyymmdd");
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd/HHmm");
 		Date current = Calendar.getInstance().getTime();
 		String date = df.format(current);
+		date = date.replace("/", "T") + "Z";
 		return date;
 	}
 	
