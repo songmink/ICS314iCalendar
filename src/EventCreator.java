@@ -11,6 +11,7 @@ import java.util.Scanner;
  * ICS 314 Spring 2016 iCalendar project
  * 
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
+ *  Due date: 02/25/2016
  */
 
 /***********************************************************************************/
@@ -121,14 +122,17 @@ public class EventCreator {
 		
 		// TODO who can evolve this?
 		/* Compare start date time and end date time */
-		if(!isVaildEvent(startDate, startTime, endDate, endTime)) {
-			System.out.print("There is a problem to make a event because your start and end datetime is not synchronizing.");
+		if(!isValidEvent(startDate, startTime, endDate, endTime)) {		
 			
 			// TODO program termination or ?
+			// 		print("There is a problem to make a event because your start and end date time is not synchronizing.");
+			// 		and terminate or return first?(little hard)
 			
 			
 			
 			
+			
+		
 			
 			
 			
@@ -392,21 +396,18 @@ public class EventCreator {
 		return true;
 	}
 	
-	//TODO Please implement this validation
-	//      
+	//TODO Please implement this validation      
 	/**
 	 * Compare start and end date time 
 	 * 
 	 * @return Boolean false if not valid otherwise true
 	 */
-	private static boolean isVaildEvent(String sd, String st, String ed, String et){
+	private static boolean isValidEvent(String sd, String st, String ed, String et){
 		
 		// TODO if not valid return false
 		// Hint: Easiest way  append sd and st and append ed and et
 		//       change string sd+st and ed+et to int sdst and edet
 		//       edet must be bigger than sdst
-		
-		
 		
 		
 		
