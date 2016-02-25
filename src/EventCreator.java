@@ -401,6 +401,7 @@ public class EventCreator {
 		// Hint: Easiest way - append sd and st and append ed and et
 		//       change string sdst and edet to int sdst and edet
 		//       edet must be bigger than sdst
+		//		 but string mm and dd should be mm dd style like 02 not 2 
 		
 		
 		
