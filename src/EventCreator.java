@@ -30,7 +30,7 @@ public class EventCreator {
 	private static String end = "END:";
 	
 	/* Program version and product id */
-	private static String version = "VERSION:1.0";
+	private static String version = "VERSION:2.0";
 	private static String prodId = "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
 	
 	/* Auto input */
@@ -268,7 +268,7 @@ public class EventCreator {
 			bw.write(eDesc + "\n");
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
-			bw.write(eCreated + "\n");
+			//bw.write(eCreated + "\n");
 			//bw.write(eSeq + "\n");
 			//bw.write(eStatus + "\n");
 			//bw.write(dtStamp + "\n");
