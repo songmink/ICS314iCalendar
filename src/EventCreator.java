@@ -2,19 +2,23 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 
 /**
- * ICS 314 Spring 2016 iCalendar project 
+ * ICS 314 Spring 2016 iCalendar project
+ * 
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
  */
 
-/*******************************************************************************/
-/*                                                                             */
-/* Please write "// TODO name I want this" comment in head of class or method  */
-/*                                                                             */
-/*******************************************************************************/
+/***********************************************************************************/
+/*                                                                                 */
+/* Please write "// TODO name" comment in head of class or method which you want   */
+/*                                                                                 */
+/***********************************************************************************/
 
 /**
  * iCalendar event creator
@@ -30,9 +34,9 @@ public class EventCreator {
 	private static String prodId = "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
 	
 	/* Auto input */
-	private static String eCreated = "CREATED:"; 	/* Event created date time */
-	private static String eLastMod = "LAST-MODIFIED:";	/* Event last modify date time */ 
-	private static String dtStamp = "DTSTAMP:";	/* Calendar date time stamp */
+	private static String eCreated = "CREATED:"; 		/* Event created date time */
+	//private static String eLastMod = "LAST-MODIFIED:";	/* Event last modify date time */ 
+	//private static String dtStamp = "DTSTAMP:";			/* Calendar date time stamp */
 	private static String cUid = "UID:";				/* Calendar uid */
 	
 	/*
@@ -46,13 +50,13 @@ public class EventCreator {
 	private static String dtEnd = "DTEND:";				/* Event end date time */
 	private static String eMethod = "METHOD:"; 			/* Event method */	
 	private static String eDesc = "DESCRIPTION:";		/* Event description */
-	private static String eSeq = "SEQUENCE:";			/* Event sequence */
-	private static String eStatus ="STATUS:";			/* Event status */
+	//private static String eSeq = "SEQUENCE:";			/* Event sequence */
+	//private static String eStatus ="STATUS:";			/* Event status */
 	private static String eSummary = "SUMMARY:";		/* Event summary */
 	private static String eLocation = "LOCATION:";		/* Event location */
 	//private static String eGeo = "GEO:";				/* Event geo */
 	
-	private static String fileName = "NewEvent";			/* default file name */
+	private static String fileName = "NewEvent";		/* default file name */
 
 	/**
 	 * Run this
@@ -64,7 +68,7 @@ public class EventCreator {
 		cScale += "GREGORIAN";
 		dtZone += "HONOLULU";
 		eMethod +="PUBLIC";
-		eStatus += "";
+		//eStatus += "";
 		//eGeo += "";
 		
 		/* 
@@ -79,17 +83,8 @@ public class EventCreator {
 		System.out.print("Enter evnet summary for title(Empty not allowed):");
 		eSummary = stringReader();
 		
-		Boolean isDate = false;
-		while(!isDate) {
-			System.out.print("Enter event start date (mm/dd/yyyy):");
-			String temp = dateReader();
-			if(isValidDate(temp)) {
-				isDate = true;
-				dtStart += temp;
-			} else {
-				System.out.print("Please check the date again\n");
-			}
-		}		
+		/* event start date */
+		dtStart += dateReader();
 		/* add separator */
 		dtStart += "T";
 		System.out.println("Enter event start time(hh:mm)");
@@ -97,22 +92,8 @@ public class EventCreator {
 		/* add end Z */
 		dtStart += "Z";
 		
-		/* 
-		 * Read event end date time
-		 */
-		
-		isDate = false; /* Initial isDate as false for restart */
-		while(!isDate) {
-			System.out.print("Enter event start date (mm/dd/yyyy):");
-			String temp = dateReader();
-			if(isValidDate(temp)) {
-				isDate = true;
-				dtEnd += temp;
-			} else {
-				System.out.print("Please check the date again\n");
-			}
-		}
-
+		/* Event end date */
+		dtEnd += dateReader();
 		/* add separator */
 		dtEnd += "T";
 		System.out.println("Enter event end time(hh:mm)");
@@ -122,57 +103,74 @@ public class EventCreator {
 		
 		System.out.print("Enter event description(Empty not allowed):");
 		eDesc = stringReader();
-		System.out.print("Enter the Sequence(Empty not allowed):");
-		eSeq += intReader();
+		//System.out.print("Enter the Sequence(Empty not allowed):");
+		//eSeq += intReader();
 		
 		System.out.print("Enter Event Location(Empty not allowed):");
 		eLocation += stringReader();
 		
 		System.out.print("Enter Event File Name:");
 		fileName += stringReader();
-		icsNewEvent(fileName);
 		
+		eCreated += currentDate();
+		icsNewEvent(fileName);
 	}
 	
 	/**
 	 * Read string user information from command line
+	 * 
 	 * @return userIn string for user input string data / empty not allowed
 	 */
 	public static String stringReader() {
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(new InputStreamReader(System.in));
 		String userIn = null;
 		Boolean isEmpty = true;
 
 		while(isEmpty){
-			
+			userIn = sc.nextLine();
 			if(userIn != null) {
 				isEmpty = false;
 			}
 		}
 		
+		sc.close();
 		return userIn;
 	}
 	
+	/**
+	 *  Date reader
+	 *  
+	 *  @return String date
+	 */
 	public static String dateReader() {
 		Scanner sc = new Scanner(System.in);
-		SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+		
 		Boolean isEmpty = true;
 		String dateInput = null;
 		while(isEmpty) {
 			dateInput = sc.next();
+			
 			if(dateInput != null) {
 				dateInput = dateInput.trim();
-				sc.close();
-				isEmpty = false;
+				
+				/* Date validation check */
+				if(isValidDate(dateInput)){
+					isEmpty = false;
+				} else {
+					/* Reset input data */
+					dateInput = null;
+				}
+			} else {
+				System.out.print("Please enter the valid date");
 			}
-			System.out.print("Please enter the valid date");
 		}
 		
+		sc.close();
 		dateInput = dateInput.replace("/", "");
 		return dateInput;
 	}
 	
-	/*
+	/**
 	 * Time reader
 	 * @return String time with hhmm format 
 	 */
@@ -184,12 +182,12 @@ public class EventCreator {
 			timeInput = sc.next();
 			if(timeInput != null) {
 				timeInput = timeInput.trim();
-				String[] hhmm = timeInput.split(":");
+				String[] hm = timeInput.split(":");
 				
-				int hh = Integer.parseInt(hhmm[0]);
-				int mm = Integer.parseInt(hhmm[1]);
+				int h = Integer.parseInt(hm[0]);
+				int m = Integer.parseInt(hm[1]);
 				
-				if(isValidTime(hh,mm)) {
+				if(isValidTime(h,m)) {
 					isEmpty = false;
 				} else {
 					timeInput = null;
@@ -214,13 +212,12 @@ public class EventCreator {
 		Boolean isEmpty = true;
 
 		while(isEmpty){
-			
 			/* read only integer */
 			while(!sc.hasNextInt()) {
 				userIn = sc.nextInt();
 			}
-		}
-		
+		}		
+		sc.close();
 		return userIn;
 	}	
 	
@@ -265,15 +262,18 @@ public class EventCreator {
 			bw.write(eDesc + "\n");
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
-			bw.write(eSeq + "\n");
-			bw.write(eStatus + "\n");
-			bw.write(dtStamp + "\n");
-			bw.write(eLastMod + "\n");
+			bw.write(eCreated + "\n");
+			//bw.write(eSeq + "\n");
+			//bw.write(eStatus + "\n");
+			//bw.write(dtStamp + "\n");
+			//bw.write(eLastMod + "\n");
 			//bw.write(eGeo + "\n");
 			
 			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
 			bw.write(end + "VCALENDAR" + "\n");
+			
+			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -296,28 +296,79 @@ public class EventCreator {
 		
 	}
 	
-	//TODO first assign
 	/**
 	 * Date validation
 	 * @return true if valid otherwise false
 	 */
-	private static boolean isValidDate(String d) {
+	private static boolean isValidDate(String date) {
+		date = date.trim();
 		
+		String[] ymd  = date.split("/");
+		
+		int y = Integer.parseInt(ymd[0]);
+		int m = Integer.parseInt(ymd[1]);
+		int d = Integer.parseInt(ymd[2]);
+		
+		/* year */
+		if(y < 0) {
+			return false;
+		}
+		
+		/* month */
+		if(0 > m || 12 < m) {
+			return false;
+		}
+		
+		/* day 31  or 30*/
+		if(m == 4 || m == 6 || m == 9 || m == 11) {
+			if(d < 0 || 31 < d) {
+				return false;
+			}
+		} else if(m != 2) {
+			if(d < 0 || 32 < d) {
+				return false;
+			}
+		}
+		
+		if(m == 2) {
+			if( y%4 == 0 && y%100 != 0 && y%400 == 0) {
+				if(d < 0 || 30 < d) {
+					return false;
+				}
+				
+			} else {
+				if(d < 0 || 29 < d) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 	
-	//TODO first assign
 	/** 
 	 * Time validation
 	 * @return true if valid otherwise false
 	 */
-	private static boolean isValidTime(int hh, int mm) {
+	private static boolean isValidTime(int h, int m) {
 		/* check the time validation */
-		if(0 > hh || 23 < hh || 0 > mm || 59 < mm) {
+		if(0 > h || 23 < h || 0 > m || 59 < m) {
 			return false;
-		}
-		
+		}	
 		return true;
 	}
+	
+	/**
+	 * Current date
+	 * 
+	 * @return String yyyymmdd
+	 */
+	
+	private static String currentDate(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyymmdd");
+		Date current = Calendar.getInstance().getTime();
+		String date = df.format(current);
+		return date;
+	}
+	
 	
 }
