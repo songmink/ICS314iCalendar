@@ -90,6 +90,8 @@ public class EventCreator {
 		
 		/* event start date */
 		System.out.print("Enter start ");
+
+		// TODO use this variable "startDate" for comparing start and end date 
 		String startDate = dateReader(sc);
 		dtStart += startDate;
 		
@@ -97,6 +99,7 @@ public class EventCreator {
 		dtStart += "T";
 		/* event start time */
 		System.out.print("Enter satar");
+		// TODO use this variable "startTime" for comparing start and end date
 		String startTime = timeReader(sc);
 		dtStart += startTime;
 		/* add end Z */
@@ -104,17 +107,33 @@ public class EventCreator {
 		
 		/* Event end date */
 		System.out.print("Enter end ");
+		// TODO use this variable "endDate" for comparing start and end date
 		String endDate = dateReader(sc);
 		dtEnd += endDate;
 		/* add separator */
 		dtEnd += "T";
 		System.out.print("Enter end ");
+		// TODO use this variable "endDate" for comparing start and end date
 		String endTime = timeReader(sc);
 		dtEnd += endTime;
 		/* add end Z */
 		dtEnd += "Z";
 		
-		/* Compare start datetime and end datetime */
+		// TODO who can evolve this?
+		/* Compare start date time and end date time */
+		if(!isVaildEvent(startDate, startTime, endDate, endTime)) {
+			System.out.print("There is a problem to make a event because your start and end datetime is not synchronizing.");
+			
+			// TODO program termination or ?
+			
+			
+			
+			
+			
+			
+			
+			
+		}
 		
 		System.out.print("Enter event description(Empty not allowed):");
 		eDesc += stringReader(sc);
@@ -373,14 +392,30 @@ public class EventCreator {
 		return true;
 	}
 	
+	//TODO Please implement this validation
+	//      
 	/**
-	 * Compare start and end datetime 
+	 * Compare start and end date time 
 	 * 
-	 * @return Boolean 
+	 * @return Boolean false if not valid otherwise true
 	 */
 	private static boolean isVaildEvent(String sd, String st, String ed, String et){
-		return true;
 		
+		// TODO if not valid return false
+		// Hint: Easiest way  append sd and st and append ed and et
+		//       change string sd+st and ed+et to int sdst and edet
+		//       edet must be bigger than sdst
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		return true;		
 	}
 	
 	/**
