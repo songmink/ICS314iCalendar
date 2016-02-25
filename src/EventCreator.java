@@ -85,51 +85,37 @@ public class EventCreator {
 		/* event start date */
 		System.out.print("Enter start ");
 
-		// TODO use this variable "startDate" for comparing start and end date 
 		String startDate = dateReader(sc);
-		dtStart += startDate;
+		dtStart += startDate.replace("/", "");
 		
 		/* add separator */
 		dtStart += "T";
 		/* event start time */
 		System.out.print("Enter satar");
-		// TODO use this variable "startTime" for comparing start and end date
 		String startTime = timeReader(sc);
-		dtStart += startTime;
+		dtStart += startTime.replace(":", "");
 		/* add end Z */
 		dtStart += "Z";
 		
 		/* Event end date */
 		System.out.print("Enter end ");
-		// TODO use this variable "endDate" for comparing start and end date
 		String endDate = dateReader(sc);
-		dtEnd += endDate;
+		dtEnd += endDate.replace("/", "");
 		/* add separator */
 		dtEnd += "T";
 		System.out.print("Enter end ");
 		// TODO use this variable "endDate" for comparing start and end date
 		String endTime = timeReader(sc);
-		dtEnd += endTime;
+		dtEnd += endTime.replace(":", "");
 		/* add end Z */
 		dtEnd += "Z";
 		
 		// TODO who can evolve this?
 		/* Compare start and end date time */
 		if(!isValidEvent(startDate, startTime, endDate, endTime)) {		
-			
-			// TODO program termination or ?
-			// 		print("There is a problem to make a event because your start and end date time is not synchronizing.");
-			// 		and terminate or return first?(little hard)
-			
-			
-			
-			
-			
-		
-			
-			
-			
-			
+			System.out.print(" - There is a problem to make an event because your start and end date time is not synchronizing.\n");
+			System.out.print("** Program halt! **");
+			System.exit(1);			
 		}
 		
 		System.out.print("Enter event description(Empty not allowed):");
@@ -194,7 +180,6 @@ public class EventCreator {
 				System.out.print("- The date you input is not valid! -\n- Please enter the valid ");
 			}
 		}
-		dateInput = dateInput.replace("/", "");
 		return dateInput;
 	}
 	
@@ -220,7 +205,6 @@ public class EventCreator {
 				System.out.print("- The time you input is not valid! -\n- Plaese enter a valid");
 			}
 		}		
-		timeInput = timeInput.replace(":", "");
 		return timeInput;
 	}
 	
@@ -327,17 +311,17 @@ public class EventCreator {
 		if(ymd.length != 3 ) {
 			return false;
 		}
-		int y = Integer.parseInt(ymd[0]);
-		int m = Integer.parseInt(ymd[1]);
-		int d = Integer.parseInt(ymd[2]);
+		int y = Integer.parseInt(ymd[0],10);
+		int m = Integer.parseInt(ymd[1],10);
+		int d = Integer.parseInt(ymd[2],10);
 		
-		/* year */
+		/* year and*/
 		if(y < 0) {
 			return false;
 		}
 		
 		/* month */
-		if(0 > m || 12 < m) {
+		if(0 >= m || 12 < m) {
 			return false;
 		}
 		
@@ -352,19 +336,17 @@ public class EventCreator {
 			}
 		}
 		
-		/* Intercalation */
-		if(m == 2) {
-			if( y%4 == 0 && y%100 != 0 && y%400 == 0) {
-				if(d < 0 || 29 < d) {
-					return false;
-				}
-				
-			} else {
-				if(d < 0 || 28 < d) {
-					return false;
-				}
+		/* LeapYear */
+		if(m == 2 && y%4 == 0 && y%100 != 0 || y%400 == 0) {
+			if(d < 0 || 29 < d) {
+				return false;
+			}
+		} else {
+			if(d < 0 || 28 < d) {
+				return false;
 			}
 		}
+			
 		return true;
 	}
 	
@@ -380,8 +362,8 @@ public class EventCreator {
 			return false;
 		}
 		
-		int h = Integer.parseInt(hm[0]);
-		int m = Integer.parseInt(hm[1]);
+		int h = Integer.parseInt(hm[0],10);
+		int m = Integer.parseInt(hm[1],10);
 		/* check the time validation */
 		if(0 > h || 23 < h || 0 > m || 59 < m) {
 			return false;
@@ -396,19 +378,49 @@ public class EventCreator {
 	 * @return Boolean false if not valid otherwise true
 	 */
 	private static boolean isValidEvent(String sd, String st, String ed, String et){
+	
+		/* date check */
+		String[] symd = sd.split("/");
+		String[] eymd = ed.split("/");
+
+		int syear = Integer.parseInt(symd[0],10);
+		int eyear = Integer.parseInt(eymd[0],10);
+		/* start year is bigger than end year */
+		if(syear > eyear) {
+			return false;
+		}
 		
-		// TODO if not valid return false
-		// Hint: Easiest way - append sd and st and append ed and et
-		//       change string sdst and edet to int sdst and edet
-		//       edet must be bigger than sdst
-		//		 but string mm and dd should be mm dd style like 02 not 2 
+		int smon = Integer.parseInt(symd[1],10);
+		int emon = Integer.parseInt(eymd[1],10);	
+		/* same year, start month is bigger than end month */
+		if(syear == eyear && smon > emon) {
+			return false;
+		}
 		
+		int sday = Integer.parseInt(symd[2],10);
+		int eday = Integer.parseInt(eymd[2],10);
+		/* same year, same month, start day is bigger than end day */
+		if(syear == eyear && smon == emon && sday > eday) {
+			return false;
+		}
 		
+		/* time check */
+		String[] shm = st.split(":");
+		String[] ehm = et.split(":");
 		
-		
-		
-		
-		
+		int shour = Integer.parseInt(shm[0],10);
+		int ehour = Integer.parseInt(ehm[0],10);
+		/* start time is bigger than end time */
+		if(shour > ehour) {
+			return false;
+		}
+
+		int smin = Integer.parseInt(shm[1],10);
+		int emin = Integer.parseInt(ehm[1],10);
+		/* same time, start minutes is bigger than end minutes */
+		if(shour == ehour && smin > emin) {
+			return false;
+		}
 		
 		return true;		
 	}
