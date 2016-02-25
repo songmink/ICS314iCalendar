@@ -320,10 +320,10 @@ public class EventCreator {
 	 * Date validation
 	 * @return true if valid otherwise false
 	 */
-	private static boolean isValidDate(String d) {
-		d = d.trim();
+	private static boolean isValidDate(String date) {
+		date = date.trim();
 		
-		String[] ymd  = d.split("/");
+		String[] ymd  = date.split("/");
 		if(ymd.length != 3 ) {
 			return false;
 		}
