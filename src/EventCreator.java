@@ -12,6 +12,7 @@ import java.util.Scanner;
  * 
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
  *  Due date: 02/25/2016
+ *  @author Songmin Kim
  */
 
 /***********************************************************************************/
