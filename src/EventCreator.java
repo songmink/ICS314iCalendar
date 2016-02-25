@@ -62,7 +62,7 @@ public class EventCreator {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.print("Event creator start.");
+		System.out.print("Event creator start.\n");
 		
 		/*  static but can modify from user input */
 		cScale += "GREGORIAN";
@@ -108,7 +108,7 @@ public class EventCreator {
 		dtEnd += endDate;
 		/* add separator */
 		dtEnd += "T";
-		System.out.println("Enter end ");
+		System.out.print("Enter end ");
 		String endTime = timeReader(sc);
 		dtEnd += endTime;
 		/* add end Z */
@@ -204,6 +204,7 @@ public class EventCreator {
 				System.out.print("- The time you input is not valid! -\n- Plaese enter a valid");
 			}
 		}		
+		timeInput = timeInput.replace(":", "");
 		return timeInput;
 	}
 	
@@ -326,11 +327,11 @@ public class EventCreator {
 		
 		/* day 31  or 30*/
 		if(m == 4 || m == 6 || m == 9 || m == 11) {
-			if(d < 0 || 31 < d) {
+			if(d < 0 || 30 < d) {
 				return false;
 			}
 		} else if(m != 2) {
-			if(d < 0 || 32 < d) {
+			if(d < 0 || 31 < d) {
 				return false;
 			}
 		}
@@ -338,12 +339,12 @@ public class EventCreator {
 		/* Intercalation */
 		if(m == 2) {
 			if( y%4 == 0 && y%100 != 0 && y%400 == 0) {
-				if(d < 0 || 30 < d) {
+				if(d < 0 || 29 < d) {
 					return false;
 				}
 				
 			} else {
-				if(d < 0 || 29 < d) {
+				if(d < 0 || 28 < d) {
 					return false;
 				}
 			}
@@ -368,7 +369,7 @@ public class EventCreator {
 		/* check the time validation */
 		if(0 > h || 23 < h || 0 > m || 59 < m) {
 			return false;
-		}	
+		}
 		return true;
 	}
 	
