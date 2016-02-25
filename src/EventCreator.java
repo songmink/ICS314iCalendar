@@ -76,42 +76,48 @@ public class EventCreator {
 		 * Evolve this!!
 		 * 
 		 */
+		
+		/* open scanner */
+		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter calendar name(Empty not allowed):");
-		cName += stringReader();
+		cName += stringReader(sc);
 		System.out.print("Enter calendar description(Empty not allowed):");
-		cDesc += stringReader();
+		cDesc += stringReader(sc);
 		System.out.print("Enter evnet summary for title(Empty not allowed):");
-		eSummary = stringReader();
+		eSummary += stringReader(sc);
 		
 		/* event start date */
-		dtStart += dateReader();
+		System.out.print("Enter event start date(yyyy/mm/dd):");
+		dtStart += dateReader(sc);
 		/* add separator */
 		dtStart += "T";
-		System.out.println("Enter event start time(hh:mm)");
-		dtStart += timeReader();
+		System.out.print("Enter event start time(hh:mm)");
+		dtStart += timeReader(sc);
 		/* add end Z */
 		dtStart += "Z";
 		
 		/* Event end date */
-		dtEnd += dateReader();
+		System.out.print("Endter event end date(yyyy/mm/dd):");
+		dtEnd += dateReader(sc);
 		/* add separator */
 		dtEnd += "T";
 		System.out.println("Enter event end time(hh:mm)");
-		dtEnd += timeReader();
+		dtEnd += timeReader(sc);
 		/* add end Z */
 		dtEnd += "Z";
 		
 		System.out.print("Enter event description(Empty not allowed):");
-		eDesc = stringReader();
+		eDesc = stringReader(sc);
 		//System.out.print("Enter the Sequence(Empty not allowed):");
 		//eSeq += intReader();
 		
 		System.out.print("Enter Event Location(Empty not allowed):");
-		eLocation += stringReader();
+		eLocation += stringReader(sc);
 		
 		System.out.print("Enter Event File Name:");
-		fileName += stringReader();
+		fileName += stringReader(sc);
 		
+		sc.close();
 		eCreated += currentDate();
 		icsNewEvent(fileName);
 	}
@@ -121,19 +127,16 @@ public class EventCreator {
 	 * 
 	 * @return userIn string for user input string data / empty not allowed
 	 */
-	public static String stringReader() {
-		Scanner sc = new Scanner(new InputStreamReader(System.in));
+	public static String stringReader(Scanner sc) {
 		String userIn = null;
 		Boolean isEmpty = true;
-
+		
 		while(isEmpty){
 			userIn = sc.nextLine();
 			if(userIn != null) {
 				isEmpty = false;
 			}
 		}
-		
-		sc.close();
 		return userIn;
 	}
 	
@@ -142,9 +145,7 @@ public class EventCreator {
 	 *  
 	 *  @return String date
 	 */
-	public static String dateReader() {
-		Scanner sc = new Scanner(System.in);
-		
+	public static String dateReader(Scanner sc) {
 		Boolean isEmpty = true;
 		String dateInput = null;
 		while(isEmpty) {
@@ -164,8 +165,6 @@ public class EventCreator {
 				System.out.print("Please enter the valid date");
 			}
 		}
-		
-		sc.close();
 		dateInput = dateInput.replace("/", "");
 		return dateInput;
 	}
@@ -174,8 +173,7 @@ public class EventCreator {
 	 * Time reader
 	 * @return String time with hhmm format 
 	 */
-	public static String timeReader() {
-		Scanner sc = new Scanner(System.in);
+	public static String timeReader(Scanner sc) {
 		Boolean isEmpty = true;
 		String timeInput = null;
 		while(isEmpty) {
@@ -196,9 +194,7 @@ public class EventCreator {
 			} else {
 				System.out.println("Plaese enter a valid time with the format.");
 			}
-		}
-		sc.close();
-		
+		}		
 		return timeInput;
 	}
 	
@@ -206,8 +202,7 @@ public class EventCreator {
 	 * Read integer user information from command line
 	 * @return userIn integer for user input integer data / empty not allowed
 	 */
-	public static int intReader() {
-		Scanner sc = new Scanner(System.in);
+	public static int intReader(Scanner sc) {
 		int userIn = 1;
 		Boolean isEmpty = true;
 
@@ -217,7 +212,6 @@ public class EventCreator {
 				userIn = sc.nextInt();
 			}
 		}		
-		sc.close();
 		return userIn;
 	}	
 	
