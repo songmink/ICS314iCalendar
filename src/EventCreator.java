@@ -22,7 +22,6 @@ import java.util.Scanner;
 
 /**
  * iCalendar event creator
- *
  */
 public class EventCreator {
 	/* Start or end calendar properties */
@@ -59,8 +58,8 @@ public class EventCreator {
 	private static String fileName = "NewEvent";		/* default file name */
 
 	/**
-	 * Run this
-	 * @param args
+	 * Main 
+	 * @param args ignore
 	 */
 	public static void main(String[] args) {
 		System.out.print("Event creator start.\n");
@@ -72,16 +71,10 @@ public class EventCreator {
 		//eStatus += "";
 		//eGeo += "";
 		
-		/* 
-		 * Read event start date time
-		 * Evolve this!!
-		 * 
-		 */
-		
 		/* open scanner */
 		Scanner sc = new Scanner(System.in);
 		
-		/* Iiput user calendar data*/
+		/* Input user calendar data*/
 		System.out.print("Enter calendar name(Empty not allowed):");
 		cName += stringReader(sc);
 		System.out.print("Enter calendar description(Empty not allowed):");
@@ -121,7 +114,7 @@ public class EventCreator {
 		dtEnd += "Z";
 		
 		// TODO who can evolve this?
-		/* Compare start date time and end date time */
+		/* Compare start and end date time */
 		if(!isValidEvent(startDate, startTime, endDate, endTime)) {		
 			
 			// TODO program termination or ?
@@ -327,10 +320,10 @@ public class EventCreator {
 	 * Date validation
 	 * @return true if valid otherwise false
 	 */
-	private static boolean isValidDate(String date) {
-		date = date.trim();
+	private static boolean isValidDate(String d) {
+		d = d.trim();
 		
-		String[] ymd  = date.split("/");
+		String[] ymd  = d.split("/");
 		if(ymd.length != 3 ) {
 			return false;
 		}
@@ -405,8 +398,8 @@ public class EventCreator {
 	private static boolean isValidEvent(String sd, String st, String ed, String et){
 		
 		// TODO if not valid return false
-		// Hint: Easiest way  append sd and st and append ed and et
-		//       change string sd+st and ed+et to int sdst and edet
+		// Hint: Easiest way - append sd and st and append ed and et
+		//       change string sdst and edet to int sdst and edet
 		//       edet must be bigger than sdst
 		
 		
