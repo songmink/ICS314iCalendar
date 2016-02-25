@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 /***********************************************************************************/
 /*                                                                                 */
-/* Please write "// TODO name" comment in head of class or method which you want   */
+/* Please write  // TODO "name comment" 										   */
 /*                                                                                 */
 /***********************************************************************************/
 
@@ -54,8 +54,8 @@ public class EventCreator {
 	//private static String eStatus ="STATUS:";			/* Event status */
 	private static String eSummary = "SUMMARY:";		/* Event summary */
 	private static String eLocation = "LOCATION:";		/* Event location */
-	//private static String eGeo = "GEO:";				/* Event geo */
-	//private static Stirng eClass = "CLASS:"			/* Event Classification */
+	private static String eGeo = "GEO:";				/* Event geo */
+	private static String eClass = "CLASS:";			/* Event Classification */
 	
 	private static String fileName = "NewEvent";		/* default file name */
 
@@ -66,7 +66,9 @@ public class EventCreator {
 	public static void main(String[] args) {
 		System.out.print("Event creator start.\n");
 		
-		/*  static but can modify from user input */
+		/* 
+		 * static but can modify from user input 
+		 */
 		cScale += "GREGORIAN";
 		dtZone += "HONOLULU";
 		eMethod +="PUBLIC";
@@ -76,64 +78,128 @@ public class EventCreator {
 		/* open scanner */
 		Scanner sc = new Scanner(System.in);
 		
-		/* Input user calendar data*/
+		/* 
+		 * Input user calendar data
+		 */
 		System.out.print("Enter calendar name(Empty not allowed):");
+		/* Read user data from command line using "stringReader" function */
 		cName += stringReader(sc);
 		System.out.print("Enter calendar description(Empty not allowed):");
+		/* Read user data from command line using "stringReader" function */
 		cDesc += stringReader(sc);
 		System.out.print("Enter evnet summary for title(Empty not allowed):");
+		/* Read user data from command line using "stringReader" function */
 		eSummary += stringReader(sc);
 		
-		/* event start date */
+		/* 
+		 * Event start date and time reader
+		 */	
 		System.out.print("Enter start ");
-
+		/* Read user data from command line using "dateReader" function */
 		String startDate = dateReader(sc);
+		/* Remove separators */ 
 		dtStart += startDate.replace("/", "");
-		
-		/* add separator */
+		/* add date and time separator "T"*/
 		dtStart += "T";
 		/* event start time */
 		System.out.print("Enter satar");
+		/* Read user data from command line using "timeReader" function */
 		String startTime = timeReader(sc);
+		/* Remove time separator */
 		dtStart += startTime.replace(":", "");
-		/* add end Z */
+		/* add end mark "Z" */
 		dtStart += "Z";
 		
-		/* Event end date */
+		/* 
+		 * Event end date and time reader
+		 */
 		System.out.print("Enter end ");
+		/* Read user data from command line using "dateReader" function */
 		String endDate = dateReader(sc);
+		/* Remove separators */
 		dtEnd += endDate.replace("/", "");
-		/* add separator */
+		/* add date and time separator "T" */
 		dtEnd += "T";
 		System.out.print("Enter end ");
-		// TODO use this variable "endDate" for comparing start and end date
+		/* Read user data from command line using "timeReader" function */
 		String endTime = timeReader(sc);
+		/* Remove time separator */
 		dtEnd += endTime.replace(":", "");
-		/* add end Z */
+		/* add end makr "Z" */
 		dtEnd += "Z";
 		
-		// TODO who can evolve this?
-		/* Compare start and end date time */
-		if(!isValidEvent(startDate, startTime, endDate, endTime)) {		
+		/* 
+		 * Event validation check 
+		 * 
+		 * 	Check the validation checker function "isValidEvent"
+		 * 	Send start and end event's date and time to as it is user input
+		 *  "isValidEvent" will return false for not valid or true for valid
+		 *  if not valid, then program will be terminated.
+		 *  
+		 */
+		if(!isValidEvent(startDate, startTime, endDate, endTime)) {
+			/* print out information */
 			System.out.print(" - There is a problem to make an event because your start and end date time is not synchronizing.\n");
 			System.out.print("** Program halt! **");
+			
+			/* program terminate */
 			System.exit(1);			
 		}
 		
+		/* Read user input text for information using "stringReader" function */
 		System.out.print("Enter event description(Empty not allowed):");
 		eDesc += stringReader(sc);
+		
+		/* Read user input integer for sequence using "intReader" function */
 		//System.out.print("Enter the Sequence(Empty not allowed):");
+		/* Read user input using "intReader" function, intReader reads only integer value */
 		//eSeq += intReader();
 		
+		//
+		// TODO Classification start here
+		// 
+		// Classification VALUEs are only three: PUBLIC, PRIVATE, CONFIDENTIAL
+		// default is PUBLIC
+		//  
+		// We have to create one more function called classReader 
+		// I do not create the function. Please create the function.
+		// I think the function should not be text input but selection input using a character from user command line
+		// If user enter nothing, then the default value is "PUBLIC"
+		// !!! MUST use "Scanner sc" for the receive data format on function
+		//
+		
+		
+		
+		
+		
+		
+
+		
+		/* Reader user input text for information using "stringReader" function */
 		System.out.print("Enter Event Location(Empty not allowed):");
 		eLocation += stringReader(sc);
 		
+
+		/* Read two float numbers from command line and return combined string the value */
+		System.out.print("Enter Geographic position(Latitude;Longitude):");
+		eGeo += floatReader(sc);	
+		
+		/* Reader user input text for information using "stringReader" function */
 		System.out.print("Enter Event File Name:");
 		fileName = stringReader(sc) + currentDate();
 		
+		/* close the scanner */
 		sc.close();
+		
+		/* Get the current date value from system */
 		eCreated += currentDate();
+		/* 
+		 * Write out ics file with the user input file name 
+		 * 	the file name will be appended the current date time string automatically.
+		 */
 		icsNewEvent(fileName);
+		
+		/* Last comment and finish */
 		System.out.print("The " + fileName + " event is created.\n Program End.");
 	}
 	
@@ -225,10 +291,27 @@ public class EventCreator {
 			}
 		}		
 		return userIn;
-	}	
+	}
 	
+	/*
+	 * float number reader from command line 
+	 */
+	public static String floatReader(Scanner sc) {
+		/* sample Geographic data */
+		/* https://www.google.com/maps/@21.2973964,-157.8162139,19.55z */
+		float lat = 21.2973964f;
+		float lon = -157.8162139f;
+		
+		// TODO check the value validation
+		//  For latitude: -90 < 90
+		// 	For Longitude: -180 < l < 180 
+		
+		/* Change the latitude and the longitude and combine */
+
+		String latLon = Float.toString(lat) + ";" + Float.toString(lon);
+		return latLon;
+	}
 	
-	//TODO: Unused item should be disabled
 	/** 
 	 * Write a new event  
 	 */
@@ -268,12 +351,15 @@ public class EventCreator {
 			bw.write(eDesc + "\n");
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
-			//bw.write(eCreated + "\n");
+			bw.write(eCreated + "\n");
 			//bw.write(eSeq + "\n");
 			//bw.write(eStatus + "\n");
 			//bw.write(dtStamp + "\n");
 			//bw.write(eLastMod + "\n");
-			//bw.write(eGeo + "\n");
+			
+			/* added two new properties */
+			bw.write(eGeo + "\n");
+			bw.write(eClass + "\n");
 			
 			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
@@ -372,8 +458,7 @@ public class EventCreator {
 		}
 		return true;
 	}
-	
-	//TODO Please implement this validation      
+	      
 	/**
 	 * Compare start and end date time 
 	 * 
@@ -439,6 +524,11 @@ public class EventCreator {
 		date = date.replace("/", "T") + "Z";
 		return date;
 	}
+	
+	//
+	// TODO for CLASS classification function 
+	//
+	
 	
 	
 }
