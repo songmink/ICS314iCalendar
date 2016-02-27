@@ -139,7 +139,7 @@ public class EventCreator {
 		 */
 		if(!isValidEvent(startDate, startTime, endDate, endTime)) {
 			/* print out information */
-			System.out.print(" - There is a problem to make an event because your start and end date time is not synchronizing.\n");
+			System.out.print(" ->>> There is a problem to make an event because your start and end date time is not synchronizing.\n");
 			System.out.print("** Program halt! **");
 			
 			/* program terminate */
@@ -181,7 +181,7 @@ public class EventCreator {
 		
 
 		/* Read two float numbers from command line and return combined string the value */
-		System.out.print("Enter Geographic position(Latitude;Longitude):");
+		System.out.print("Geographical position of your event.\n");
 		eGeo += floatReader(sc);	
 		
 		/* Reader user input text for information using "stringReader" function */
@@ -242,10 +242,10 @@ public class EventCreator {
 				} else {
 					/* Reset input data */
 					dateInput = null;
-					System.out.print("- The date you input is not valid! -\n- Please enter a valid ");
+					System.out.print("->>> The date you input is not valid! -\n- Please enter a valid ");
 				}
 			} else {
-				System.out.print("- The date you input is not valid! -\n- Please enter the valid ");
+				System.out.print("->>> The date you input is not valid! -\n- Please enter the valid ");
 			}
 		}
 		return dateInput;
@@ -266,11 +266,11 @@ public class EventCreator {
 					isEmpty = false;
 				} else {
 					timeInput = null;
-					System.out.print("- Tha time you input is not valid! -\n- Please enter a valid ");
+					System.out.print("->>> Tha time you input is not valid! -\n- Please enter a valid ");
 				}
 				
 			} else {
-				System.out.print("- The time you input is not valid! -\n- Plaese enter a valid");
+				System.out.print("->>> The time you input is not valid! -\n- Plaese enter a valid");
 			}
 		}		
 		return timeInput;
@@ -297,15 +297,49 @@ public class EventCreator {
 	 * float number reader from command line 
 	 */
 	public static String floatReader(Scanner sc) {
-		/* sample Geographic data */
+		/* sample Geographic data POST */
 		/* https://www.google.com/maps/@21.2973964,-157.8162139,19.55z */
+		/* Default geographical position */		
 		float lat = 21.2973964f;
 		float lon = -157.8162139f;
+
+		Boolean checker = false;
+		while(!checker) {
+			try {
+				System.out.print("Enter your event location latitude as a float number.(Range:-90.0 to 90.0)");
+				lat = sc.nextFloat();
+				checker = true;
+				
+				/* For latitude: -90 < lon < 90 */
+				if(-90.0 > lat || lat > 90.0) {
+					System.out.print("->>> Please, ");
+					checker = false;
+				}
+			} catch (Exception InputMismatchException){
+				System.out.print("->>> The latitude should be a float number. Please, ");
+				checker = false;
+				sc.next();
+			}
+		}
 		
-		// TODO check the value validation
-		//  For latitude: -90 < 90
-		// 	For Longitude: -180 < l < 180 
-		
+		checker = false;
+		while(!checker) {
+			try {
+				System.out.print("Enter your event location longitude as a float number.(Ragen:-180.0 to 180.0)");
+				lon = sc.nextFloat();
+				checker = true;
+				
+				/* For Longitude: -180 < lat < 180 */
+				if(-180.0 > lon || lon > 180.0) {
+					System.out.print("->>> Please, ");
+					checker = false;
+				}
+			} catch (Exception InputMissmatchException) {
+				System.out.print("->>> The logitude should be a float number. Please, ");
+				checker = false;
+				sc.next();
+			}
+		}
 		/* Change the latitude and the longitude and combine */
 
 		String latLon = Float.toString(lat) + ";" + Float.toString(lon);
