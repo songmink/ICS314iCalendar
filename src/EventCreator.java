@@ -25,6 +25,10 @@ import java.util.Scanner;
  * iCalendar event creator
  */
 public class EventCreator {
+	public EventCreator() {
+		
+	}
+	
 	/* Start or end calendar properties */
 	private static String begin = "BEGIN:";
 	private static String end = "END:";
@@ -163,19 +167,10 @@ public class EventCreator {
 		 */
 		// eSeq += intReader();
 
-		//
-		// TODO Classification start here
-		//
-		// Classification VALUEs are only three: PUBLIC, PRIVATE, CONFIDENTIAL
-		// default is PUBLIC
-		//
-		// We have to create one more function called classReader
-		// I do not create the function. Please create the function.
-		// I think the function should not be text input but selection input
-		// using a character from user command line
-		// If user enter nothing, then the default value is "PUBLIC"
-		// !!! MUST use "Scanner sc" for the receive data format on function
-		//
+		/*
+		 * print statements are contained in class reader
+		 */
+		eClass += classReader(sc);
 
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -572,8 +567,62 @@ public class EventCreator {
 		return date;
 	}
 
-	//
-	// TODO for CLASS classification function
-	//
+	/**
+	 * Prompts the user to choose a privacy setting
+	 * Numbers are used to represent options because
+	 * it is easier to type and verify
+	 * @param scan
+	 * @return privacy
+	 * (1) returns "PUBLIC" if 1 is entered
+	 * (2) returns "PRIVATE" if 2 is entered
+	 * (3) returns "CONFIDENTIAL" if 3 is entered
+	 */
+	public static String classReader(Scanner scan) {
+		String privacy;
 
+		System.out.print("Response: ");
+		do {
+			    System.out.println("Enter Privacy Settings:");
+                System.out.print(
+                     "Enter 1 for PUBLIC\n" +
+                     "Enter 2 for PRIVATE\n"+
+            		 "Enter 3 for CONFIDENTIAL\n");
+			     System.out.print("Response: ");
+			     privacy = scan.nextLine().trim();
+		}
+		while(!isValidClass(privacy));
+				
+		int option = Integer.parseInt(privacy);
+		
+		if(option == 1) { 		 
+	        System.out.println("Your privacy was set as PUBLIC");
+            return "PUBLIC";   
+		}
+		else if(option == 2) { 
+			System.out.println("Your privacy was set as PRIVATE");
+			return "PRIVATE";
+		}
+		else {
+			System.out.println("Your privacy was set as CONFIDENTIAL");
+			return "CONFIDENTIAL";
+		}
+	}
+	/**
+	 * Given a String, it checks if 1,2, or 3 was entered.
+	 * @param privacy
+	 * @return 
+	 * (1) true if 1,2, or 3 were given as input
+	 * (2) false otherwise 
+	 */
+	private static boolean isValidClass(String privacy) {
+		if(privacy.equals("1") || privacy.equals("2") 
+				||  privacy.equals("3") ) {
+			
+			return true;
+		}
+		else {  
+			System.out.println("- The setting you input is not valid! -");			
+			return false;
+		}
+	}
 }
