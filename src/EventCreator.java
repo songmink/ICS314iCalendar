@@ -171,6 +171,10 @@ public class EventCreator {
 		 * print statements are contained in class reader
 		 */
 		eClass += classReader(sc);
+		
+		// Second version
+		//System.out.print("Enter Class(p for private, c for confidential, empty enter for public");
+		//eClass += classReader2(sc);
 
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -189,8 +193,11 @@ public class EventCreator {
 		 * Reader user input text for information using "stringReader" function
 		 */
 		System.out.print("Enter Event File Name:");
-		fileName = stringReader(sc) + currentDate();
-
+		if(stringReader(sc).isEmpty()){
+			fileName = currentDate();
+		} else {
+			fileName = stringReader(sc);
+		}
 		/* close the scanner */
 		sc.close();
 
@@ -216,7 +223,7 @@ public class EventCreator {
 		Boolean isEmpty = true;
 
 		while (isEmpty) {
-			userIn = sc.next();
+			userIn = sc.nextLine();
 			if (userIn != null) {
 				isEmpty = false;
 			}
@@ -580,7 +587,6 @@ public class EventCreator {
 	public static String classReader(Scanner scan) {
 		String privacy;
 
-		System.out.print("Response: ");
 		do {
 			    System.out.println("Enter Privacy Settings:");
                 System.out.print(
@@ -616,7 +622,7 @@ public class EventCreator {
 	 */
 	private static boolean isValidClass(String privacy) {
 		if(privacy.equals("1") || privacy.equals("2") 
-				||  privacy.equals("3") ) {
+				||  privacy.equals("3") || privacy.isEmpty() ) {
 			
 			return true;
 		}
@@ -624,5 +630,33 @@ public class EventCreator {
 			System.out.println("- The setting you input is not valid! -");			
 			return false;
 		}
+	}
+	
+	/**
+	 * Simple class input
+	 * @param sc for user input
+	 * @return PUBLIC, PRIVATE, or CONFIDENTIAL, default is PUBLIC
+	 */
+	public static String classReader2(Scanner sc) {
+		String userIn;
+		boolean loop = false;
+		
+		while(!loop){
+			userIn = sc.nextLine();
+			if(userIn.isEmpty()){
+				loop = true;
+				return "PUBLIC";
+			} else if(userIn.equals("p")) {
+				loop = true;
+				return "PRIVATE";
+			} else if (userIn.equals("c")) {
+				loop = true;
+				return "CONFIDENTIAL";
+			} else {
+				loop = false;
+				System.out.print("Please, Enter p, c, or empty");
+			}
+		}
+		return "PUBLIC";
 	}
 }
