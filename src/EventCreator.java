@@ -167,12 +167,15 @@ public class EventCreator {
 		 */
 		// eSeq += intReader();
 
+		// TODO select one of them
 		/*
 		 * print statements are contained in class reader
 		 */
 		eClass += classReader(sc);
 		
-		// Second version
+		/*
+		 *  Second version
+		 */
 		//System.out.print("Enter Class(p for private, c for confidential, empty enter for public");
 		//eClass += classReader2(sc);
 
@@ -439,7 +442,7 @@ public class EventCreator {
 	 * 
 	 * @return true if valid otherwise false
 	 */
-	private static boolean isValidDate(String date) {
+	public static boolean isValidDate(String date) {
 		date = date.trim();
 
 		String[] ymd = date.split("/");
@@ -476,7 +479,7 @@ public class EventCreator {
 			if (d < 0 || 29 < d) {
 				return false;
 			}
-		} else {
+		} else if (m == 2){
 			if (d < 0 || 28 < d) {
 				return false;
 			}
@@ -490,7 +493,7 @@ public class EventCreator {
 	 * 
 	 * @return boolean true if valid otherwise false
 	 */
-	private static boolean isValidTime(String t) {
+	public static boolean isValidTime(String t) {
 		t = t.trim();
 		String[] hm = t.split(":");
 
@@ -512,7 +515,7 @@ public class EventCreator {
 	 * 
 	 * @return Boolean false if not valid otherwise true
 	 */
-	private static boolean isValidEvent(String sd, String st, String ed, String et) {
+	public static boolean isValidEvent(String sd, String st, String ed, String et) {
 
 		/* date check */
 		String[] symd = sd.split("/");
@@ -546,14 +549,14 @@ public class EventCreator {
 		int shour = Integer.parseInt(shm[0], 10);
 		int ehour = Integer.parseInt(ehm[0], 10);
 		/* start time is bigger than end time */
-		if (shour > ehour) {
+		if (syear == eyear && smon == emon && sday == eday && shour > ehour) {
 			return false;
 		}
 
 		int smin = Integer.parseInt(shm[1], 10);
 		int emin = Integer.parseInt(ehm[1], 10);
 		/* same time, start minutes is bigger than end minutes */
-		if (shour == ehour && smin > emin) {
+		if (syear == eyear && smon == emon && sday == eday && shour == ehour && smin > emin) {
 			return false;
 		}
 
@@ -566,7 +569,7 @@ public class EventCreator {
 	 * @return String yyyymmdd
 	 */
 
-	private static String currentDate() {
+	public static String currentDate() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd/HHmm");
 		Date current = Calendar.getInstance().getTime();
 		String date = df.format(current);
