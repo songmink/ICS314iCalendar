@@ -1,19 +1,17 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class ReadEvent {
 	public static void main(String[] args) {
-	    String[] fileNames = GetFileNames();
-	    System.out.println(Arrays.toString(fileNames));
+	    //String[] fileNames = GetFileNames();
+	   // System.out.println(Arrays.toString(fileNames));
 	    }	    
-	public static String[] GetFileNames() {
-	  Scanner sc = new Scanner(System.in);
+	public static String[] GetFileNames(Scanner sc) {
 	  String userinput;
 	  String checkextension;
 	  String[] FileNamesArray;
 	  File file;
-	  System.out.println("Enter ICS File Names.");
+	  System.out.println("Enter ICS File Names sperated by spaces (ex: filename.ics filename.ics):");
 	  userinput = sc.nextLine();
 	  FileNamesArray = userinput.split("\\s+");
 	  for (int i = 0; i < FileNamesArray.length; i++) {
@@ -28,3 +26,4 @@ public class ReadEvent {
 	  return null;
 	}
 }
+
