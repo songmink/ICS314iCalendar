@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 /***********************************************************************************/
 /*                                                                                 */
-/* Please write  // TODO "name comment" 										   */
+/* Please write "name comment" 										   */
 /*                                                                                 */
 /***********************************************************************************/
 
@@ -576,10 +576,10 @@ public class EventCreator {
 	 */
 
 	public static String currentDate() {
-		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd/HHmm");
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd/HHmmss");
 		Date current = Calendar.getInstance().getTime();
 		String date = df.format(current);
-		date = date.replace("/", "T") + "Z";
+		date = date.replace("/", "T");
 		return date;
 	}
 

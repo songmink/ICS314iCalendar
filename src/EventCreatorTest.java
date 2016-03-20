@@ -1,11 +1,7 @@
 import static org.junit.Assert.*;
 import java.io.*;
 import java.util.Scanner;
-
 import org.junit.Test;
-import org.junit.runner.Result;
-
-import static org.junit.Assert.assertEquals;
 
 public class EventCreatorTest {
     
@@ -13,10 +9,12 @@ public class EventCreatorTest {
 	public void testStringReader() {
 		EventCreator test = new EventCreator();
 		Scanner sc = new Scanner("a");
+		@SuppressWarnings("static-access")
 		String result = test.stringReader(sc);
 		assertEquals("a", result);
 	}
  
+	@SuppressWarnings("static-access")
 	@Test //requires a test file in the ICS Calendar directory
 	public void testClassReader() throws FileNotFoundException {
 		System.out.println("------------------------");
@@ -70,6 +68,7 @@ public class EventCreatorTest {
 		EventCreator test = new EventCreator();
 		// Leaf year
 		Scanner sc = new Scanner("2016/02/29");
+		@SuppressWarnings("static-access")
 		String result = test.dateReader(sc);
 		assertEquals("2016/02/29", result);
 	}
@@ -78,11 +77,13 @@ public class EventCreatorTest {
 	public void testTimeReader() {
 		EventCreator test = new EventCreator();
 		Scanner sc = new Scanner("11:22");
+		@SuppressWarnings("static-access")
 		String result = test.timeReader(sc);
 		assertEquals("11:22", result);
 	}
 
 
+	@SuppressWarnings("static-access")
 	@Test
 	public void testIsVaildDate(){
 		EventCreator test = new EventCreator();
@@ -101,6 +102,7 @@ public class EventCreatorTest {
 		}
 	}
 	
+	@SuppressWarnings("static-access")
 	@Test
 	public void testIsVaildTime(){
 		EventCreator test = new EventCreator();
@@ -116,6 +118,7 @@ public class EventCreatorTest {
 		}	
 	}
 
+	@SuppressWarnings("static-access")
 	@Test
 	public void testIsValidEvent(){
 		EventCreator test = new EventCreator();
