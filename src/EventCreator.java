@@ -26,9 +26,9 @@ import java.util.Scanner;
  */
 public class EventCreator {
 	public EventCreator() {
-		
+
 	}
-	
+
 	/* Start or end calendar properties */
 	private static String begin = "BEGIN:";
 	private static String end = "END:";
@@ -39,10 +39,8 @@ public class EventCreator {
 
 	/* Auto input */
 	private static String eCreated = "CREATED:"; /* Event created date time */
-	// private static String eLastMod = "LAST-MODIFIED:"; /* Event last modify
-	// date time */
-	// private static String dtStamp = "DTSTAMP:"; /* Calendar date time stamp
-	// */
+	// private static String eLastMod = "LAST-MODIFIED:"; /* Event last modify date time */
+	// private static String dtStamp = "DTSTAMP:"; /* Calendar date time stamp */
 	// private static String cUid = "UID:"; /* Calendar uid */
 
 	/*
@@ -60,8 +58,9 @@ public class EventCreator {
 	// private static String eStatus ="STATUS:"; /* Event status */
 	private static String eSummary = "SUMMARY:"; /* Event summary */
 	private static String eLocation = "LOCATION:"; /* Event location */
-	private static String eGeo = "GEO:"; /* Event geo */
+	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
+	// private static String eComment = "COMMENT:"; /* Event comment(distance) */
 
 	private static String fileName = "NewEvent"; /* default file name */
 
@@ -95,7 +94,7 @@ public class EventCreator {
 		System.out.print("Enter calendar description(Empty not allowed):");
 		/* Read user data from command line using "stringReader" function */
 		cDesc += stringReader(sc);
-		System.out.print("Enter evnet summary for title(Empty not allowed):");
+		System.out.print("Enter event summary for title(Empty not allowed):");
 		/* Read user data from command line using "stringReader" function */
 		eSummary += stringReader(sc);
 
@@ -110,13 +109,13 @@ public class EventCreator {
 		/* add date and time separator "T" */
 		dtStart += "T";
 		/* event start time */
-		System.out.print("Enter satar");
+		System.out.print("Enter start");
 		/* Read user data from command line using "timeReader" function */
 		String startTime = timeReader(sc);
 		/* Remove time separator */
 		dtStart += startTime.replace(":", "");
-		/* add end mark "Z" */
-		dtStart += "Z";
+		/* add UTC mark "Z" */
+		//dtStart += "Z";
 
 		/*
 		 * Event end date and time reader
@@ -133,8 +132,10 @@ public class EventCreator {
 		String endTime = timeReader(sc);
 		/* Remove time separator */
 		dtEnd += endTime.replace(":", "");
-		/* add end makr "Z" */
-		dtEnd += "Z";
+		/* add UTC mark "Z" */
+		//dtEnd += "Z";
+		
+		
 
 		/*
 		 * Event validation check
@@ -172,12 +173,13 @@ public class EventCreator {
 		 * print statements are contained in class reader
 		 */
 		eClass += classReader(sc);
-		
+
 		/*
-		 *  Second version
+		 * Second version
 		 */
-		//System.out.print("Enter Class(p for private, c for confidential, empty enter for public");
-		//eClass += classReader2(sc);
+		// System.out.print("Enter Class(p for private, c for confidential,
+		// empty enter for public");
+		// eClass += classReader2(sc);
 
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -196,7 +198,7 @@ public class EventCreator {
 		 * Reader user input text for information using "stringReader" function
 		 */
 		System.out.print("Enter Event File Name:");
-		if(stringReader(sc).isEmpty()){
+		if (stringReader(sc).isEmpty()) {
 			fileName = currentDate();
 		} else {
 			fileName = stringReader(sc);
@@ -267,13 +269,13 @@ public class EventCreator {
 	/**
 	 * Time reader
 	 * 
-	 * @return String time with hhmm format
+	 * @return String time with hhmmss format
 	 */
 	public static String timeReader(Scanner sc) {
 		Boolean isEmpty = true;
 		String timeInput = null;
 		while (isEmpty) {
-			System.out.print("event time(hh:mm):");
+			System.out.print("event time(hh:mm:ss):");
 			timeInput = sc.next();
 			if (timeInput != null) {
 				if (isValidTime(timeInput)) {
@@ -410,6 +412,9 @@ public class EventCreator {
 			bw.write(eGeo + "\n");
 			bw.write(eClass + "\n");
 
+			/* added one new property */
+			// bw.write(eComment + "\n");
+
 			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
 			bw.write(end + "VCALENDAR" + "\n");
@@ -479,7 +484,7 @@ public class EventCreator {
 			if (d < 0 || 29 < d) {
 				return false;
 			}
-		} else if (m == 2){
+		} else if (m == 2) {
 			if (d < 0 || 28 < d) {
 				return false;
 			}
@@ -495,16 +500,17 @@ public class EventCreator {
 	 */
 	public static boolean isValidTime(String t) {
 		t = t.trim();
-		String[] hm = t.split(":");
+		String[] hms = t.split(":");
 
-		if (hm.length != 2) {
+		if (hms.length != 3) {
 			return false;
 		}
 
-		int h = Integer.parseInt(hm[0], 10);
-		int m = Integer.parseInt(hm[1], 10);
+		int h = Integer.parseInt(hms[0], 10);
+		int m = Integer.parseInt(hms[1], 10);
+		int s = Integer.parseInt(hms[2], 10);
 		/* check the time validation */
-		if (0 > h || 23 < h || 0 > m || 59 < m) {
+		if (0 > h || 23 < h || 0 > m || 59 < m || 0 <s || 59 < s) {
 			return false;
 		}
 		return true;
@@ -578,78 +584,71 @@ public class EventCreator {
 	}
 
 	/**
-	 * Prompts the user to choose a privacy setting
-	 * Numbers are used to represent options because
-	 * it is easier to type and verify
+	 * Prompts the user to choose a privacy setting Numbers are used to
+	 * represent options because it is easier to type and verify
+	 * 
 	 * @param scan
-	 * @return privacy
-	 * (1) returns "PUBLIC" if 1 is entered
-	 * (2) returns "PRIVATE" if 2 is entered
-	 * (3) returns "CONFIDENTIAL" if 3 is entered
+	 * @return privacy (1) returns "PUBLIC" if 1 is entered (2) returns
+	 *         "PRIVATE" if 2 is entered (3) returns "CONFIDENTIAL" if 3 is
+	 *         entered
 	 */
 	public static String classReader(Scanner scan) {
 		String privacy;
 
 		do {
-			    System.out.println("Enter Privacy Settings:");
-                System.out.print(
-                     "Enter 1 for PUBLIC\n" +
-                     "Enter 2 for PRIVATE\n"+
-            		 "Enter 3 for CONFIDENTIAL\n");
-			     System.out.print("Response: ");
-			     privacy = scan.nextLine().trim();
-		}
-		while(!isValidClass(privacy));
-				
+			System.out.println("Enter Privacy Settings:");
+			System.out.print("Enter 1 for PUBLIC\n" + "Enter 2 for PRIVATE\n" + "Enter 3 for CONFIDENTIAL\n");
+			System.out.print("Response: ");
+			privacy = scan.nextLine().trim();
+		} while (!isValidClass(privacy));
+
 		int option = Integer.parseInt(privacy);
-		
-		if(option == 1) { 		 
-	        System.out.println("Your privacy was set as PUBLIC");
-            return "PUBLIC";   
-		}
-		else if(option == 2) { 
+
+		if (option == 1) {
+			System.out.println("Your privacy was set as PUBLIC");
+			return "PUBLIC";
+		} else if (option == 2) {
 			System.out.println("Your privacy was set as PRIVATE");
 			return "PRIVATE";
-		}
-		else {
+		} else {
 			System.out.println("Your privacy was set as CONFIDENTIAL");
 			return "CONFIDENTIAL";
 		}
 	}
+
 	/**
 	 * Given a String, it checks if 1,2, or 3 was entered.
+	 * 
 	 * @param privacy
-	 * @return 
-	 * (1) true if 1,2, or 3 were given as input
-	 * (2) false otherwise 
+	 * @return (1) true if 1,2, or 3 were given as input (2) false otherwise
 	 */
 	private static boolean isValidClass(String privacy) {
-		if(privacy.equals("1") || privacy.equals("2") 
-				||  privacy.equals("3") || privacy.isEmpty() ) {
-			
+		if (privacy.equals("1") || privacy.equals("2") || privacy.equals("3") || privacy.isEmpty()) {
+
 			return true;
-		}
-		else {  
-			System.out.println("- The setting you input is not valid! -");			
+		} else {
+			System.out.println("- The setting you input is not valid! -");
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Simple class input
-	 * @param sc for user input
+	 * 
+	 * @param sc
+	 *            for user input
 	 * @return PUBLIC, PRIVATE, or CONFIDENTIAL, default is PUBLIC
 	 */
-	public static String classReader2(Scanner sc) {
+	public String classReader2(Scanner sc) {
 		String userIn;
 		boolean loop = false;
-		
-		while(!loop){
+
+		while (!loop) {
 			userIn = sc.nextLine();
-			if(userIn.isEmpty()){
+			if (userIn.isEmpty()) {
 				loop = true;
 				return "PUBLIC";
-			} else if(userIn.equals("p")) {
+			} else if (userIn.equals("p")) {
 				loop = true;
 				return "PRIVATE";
 			} else if (userIn.equals("c")) {
