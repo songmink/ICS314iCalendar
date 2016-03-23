@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class InsertComment {
@@ -16,20 +17,31 @@ public class InsertComment {
 		int catNum = 25;
 		
 		Scanner sc = new Scanner(System.in);
-		System.out.print("How many events do you want to read?(default 2):");
-		eventNum = sc.nextInt();
-		sc.nextLine();
 		
+		try{
+			do {	
+				System.out.print("How many events do you want to read?(default 2):");
+				eventNum = sc.nextInt();
+				sc.nextLine();
+			}
+			while(eventNum < 0); 
+		}
+		catch(Exception e) {
+			System.out.println("ERROR: problem with integer");
+			System.exit(0);
+		}
 		/*
 		 *  call reader function
 		 */
 		String[][] event = new String[eventNum][catNum];
-		String fileName[] = new String[eventNum];
-		for (int i = 0; i < eventNum; i++) {
-			System.out.print("Input event file name:");
-			fileName[i] = sc.nextLine();
-			event[i] = eventReader(fileName[i]);
-		}
+		String fileName[] = new String[eventNum]; // We can use Nicks code for this one
+		
+			for (int i = 0; i < eventNum; i++) {
+				System.out.print("Input event file name:");
+				fileName[i] = sc.nextLine();
+				event[i] = eventReader(fileName[i]);
+			}
+		
 
 		/*
 		 * find geo data / need function ???
@@ -113,19 +125,82 @@ public class InsertComment {
 		//final double earthRmile = 3953.0;
 		final double earthRMetre = 6371;
 		final double R = Math.PI / 180;
-		double lat1R = lat1 * R;
+		double lat1R = lat1 * R; // convert to radians pi/180 * 180*x
 		double lat2R = lat2 * R;
 		double dLat = R * (lat2 - lat2);
 		double dLon = R * (lon2 - lon1);
-		
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1R) * Math.cos(lat2R) * Math.sin(dLon/2) * Math.sin(dLon/2);
 		double c = 2* Math.asin(Math.sqrt(a));
 		double dist = earthRMetre * c;
 
 		return dist;
 	}
+	/* code for filtering (if necessary)
+	 //Do we allow the same file to be used more than once?
 
+      example of user input
+	  file1 
+	  file2
+	  file1
+	  file3
+	  file1
+	  
+	  sorts
+	  file1 <- circle distance from file1 to file1
+	  file1 <- circle distance from file1 to file1
+	  file1 <- circle distance from file2 to file1
+	  file2 <- circle distance from file2 to file3
+	  file3<- empty
+	  
+	  
+	  Do we filter files where the two files next to each other
+	  where at least one of them does not contain a correct Geo field?
+	  
+	  file1.geo = null <- cannot calculate <- useless
+	  file2.geo = null <- cannot calculate <- useless
+	  file3.geo = 2,2 <- can calculate <- required to use
+	  file4.geo = 4,4 <- cannot calculate <- required to use
+	 
+	 */
+	
+	/* code for sorting
+	
+	
+	//Can access like this, int a = map.time
+	//Or add setters and getters
+	private static class FileNamesAndTimes {
+	   //-1 marks a bad/blank time value
+	   //parse the time portion into a int
+	   //Because we use military time
+	   //1704 > 1204
+	   //0404 > 0400
+	   //0499 makes no sense, but I don't know what we can assume about times
+		int time = -1;
+		String fileName;
+		public FileNamesAndTimes() {
+			
+		}	
+	}
+	
+	public static class eventCompare implements Comparator<FileNamesAndTimes> {
+		//If order is incorrect, subtract event2 from event1
+	    //I'm somewhat sure that they are meant to be for the same date,
+		public int compare(FileNamesAndTimes event1, FileNamesAndTimes event2) {			
+			return event1.time - event2.time;
+		}
+	} 
 
+    //Assume index of fileName = index of Double Array
+	//Rearrange fileName array Based on time 
+	//do different times need to be taken into consideration?
+	// model 2 contains a 'z', do we assume that the files that are
+	// used are okay?
+    public static void sort(String[][] events, int eventNum) {
+    	//events[];
+    	
+    }
+	
+	*/
 	public static void insertComment(String fileName, String[] icsData, double distance) {
 		StringBuilder b = new StringBuilder();
 		b.append("new-");
