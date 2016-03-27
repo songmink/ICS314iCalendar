@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
+
 
 public class InsertComment {
 
@@ -34,7 +36,7 @@ public class InsertComment {
 		 *  call reader function
 		 */
 		String[][] event = new String[eventNum][catNum];
-		String fileName[] = new String[eventNum]; // We can use Nicks code for this one
+		String fileName[] = new String[eventNum]; 
 		
 			for (int i = 0; i < eventNum; i++) {
 				System.out.print("Input event file name:");
@@ -177,6 +179,7 @@ public class InsertComment {
 	   //0499 makes no sense, but I don't know what we can assume about times
 		int time = -1;
 		String fileName;
+		int index;
 		public FileNamesAndTimes() {
 			
 		}	
@@ -195,8 +198,30 @@ public class InsertComment {
 	//do different times need to be taken into consideration?
 	// model 2 contains a 'z', do we assume that the files that are
 	// used are okay?
-    public static void sort(String[][] events, int eventNum) {
-    	//events[];
+    public static void sort(String[][] events, String fileNames,int eventNum) {
+    	PriorityQueue<FileNamesAndTimes> queue;
+		queue = new PriorityQueue<FileNamesAndTimes>(5, new eventCompare() );
+		FileNamesAndTimes event = null;
+		String dataToAdd;
+    	 for(int i = 0; i < eventNum; i++) {
+    	     event = new FileNamesAndTimes();
+    	     event.index = i;
+    	     event.fileName = fileNames[0];
+    	     for(int j = 0; j < 20; j++) {
+    	        if(events[i][j].contains("DTSTART:") ) {
+    	        	int indexOfT = events[i][j].indexOf('T');
+    	        	//search for time
+    	        	dataToAdd = dataToAdd.substring(indexOfT+1,dataToAdd.length() );
+    	        	//parse it
+    	        	event.time = Integer.parseInt(dataToAdd);
+                    
+    	        	break;
+    	        }
+    	        
+    	     }
+    	     queue.add(event);
+    	     
+    	 }
     	
     }
 	
