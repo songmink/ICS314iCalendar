@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
-
 import org.junit.Test;
-
+import static org.junit.Assert.assertThat;
 
 /**
  * 
@@ -13,12 +12,6 @@ import org.junit.Test;
  */
 public class InsertCommentTest {
 
-	@Test
-	public void test() {
-		InsertComment test = new InsertComment();
-		System.out.println(test.calDistance(0, 90, 22, 91) );
-	}
-	
 	@Test
 	public void testSort() {
 		InsertComment test = new InsertComment();
@@ -34,13 +27,35 @@ public class InsertCommentTest {
 		fileNames[1] = "abcde.ics";
 		int[] array;
 		array = test.getSorted(events, fileNames, 2);
-		System.out.println(array[0]);
+		//System.out.println(array[0]);
 		assertEquals(array[0],1);
 	}
 	
 	@Test
 	public void calDistanceTest(){
-		InsertComment test1 = new InsertComment(); 
+		InsertComment test = new InsertComment();
+		double d = 0;
+		double[] lat1 = {-45, 0, 45};
+		double[] lon1 = {-90, 0, 90};
+		double[] lat2 = {0, 45, 90};
+		double[] lon2 = {0,45, -45};
+		
+		int[] answer = {10010, 6672, 5004};
+		for(int i = 0; i < lat1.length; i++) {
+			Boolean max = false;
+			Boolean min = false;
+			double result = test.calDistance(lat1[i], lon1[i], lat2[i], lon2[i]);
+			int r = (int) result;
+			//System.out.println("Distance:" + r);
+			if ( r < (answer[i] + 5)){
+				max = true;
+			}
+			if ( r > (answer[i] - 5)) {
+				min = true;
+			}
+			assertEquals(max, min);
+		}
+		
 	}
 	public void insertCommentTest(){
 		

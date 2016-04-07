@@ -135,15 +135,14 @@ public class InsertComment {
 		}
 		/* Earth Mean Radius */
 		//final double earthRmile = 3953.0;
-		final double earthRMetre = 6371;
-		final double R = Math.PI / 180;
-		double lat1R = lat1 * R; // convert to radians pi/180 * 180*x
-		double lat2R = lat2 * R;
-		double dLat = R * (lat2 - lat2);
-		double dLon = R * (lon2 - lon1);
+		final double earthRKm = 6371;
+		double lat1R = Math.toRadians(lat1);
+		double lat2R = Math.toRadians(lat2);
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLon = Math.toRadians(lon2 - lon1);
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1R) * Math.cos(lat2R) * Math.sin(dLon/2) * Math.sin(dLon/2);
-		double c = 2 * Math.asin(Math.sqrt(Math.abs(a)));
-		double dist = earthRMetre * c;
+		double c = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+		double dist = earthRKm * c;
 		return dist;
 	}
 	
