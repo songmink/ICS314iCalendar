@@ -16,7 +16,7 @@ public class InsertComment {
 		
 		/* default event number and category number */
 		int eventNum = 2;
-		int catNum = 25;
+		int catNum = 50;
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -29,7 +29,7 @@ public class InsertComment {
 			while(eventNum < 0); 
 		}
 		catch(Exception e) {
-			System.out.println("ERROR: problem with integer");
+			System.out.println("ERROR: integer");
 			System.exit(0);
 		}
 		/*
@@ -62,8 +62,7 @@ public class InsertComment {
 				}
 			}
 			if(!hasgeo){
-				System.err.println("One of your files does not have a Geo field");
-				System.exit(0);
+				geoData[i] = null;
 			}
 		}
 		
@@ -73,33 +72,47 @@ public class InsertComment {
 		double lat[] = new double[eventNum];
 		double lon[] = new double[eventNum];
 		for(int i = 0; i < eventNum; i++) {
-			geoData[i] = geoData[i].replace("GEO:", "");
-			String temp[] = geoData[i].split(";");
+			if (geoData[i] != null) {
+				geoData[i] = geoData[i].replace("GEO:", "");
+				String temp[] = geoData[i].split(";");
 			
-			lat[i] = Double.parseDouble(temp[0]);
-			lon[i] = Double.parseDouble(temp[1]);
-			
-			// TODO remove later
-			System.out.println(lat[i] + ":" + lon[i]);
+				lat[i] = Double.parseDouble(temp[0]);
+				lon[i] = Double.parseDouble(temp[1]);
+			}
 		}
 		
 		/*
 		 *  Calculate distance by input order 
 		 */
-		int sortedarray[] = getSorted(event, fileName, eventNum);
+		int sortedArray[] = getSorted(event, fileName, eventNum);
 		double distance[] = new double [eventNum];
-		System.out.println(sortedarray.length);
-		for(int i = 0; i < sortedarray.length - 1; i++){
-			System.out.println("ABCDE" + sortedarray[i]);
-			distance[sortedarray[i]] = calDistance(lat[sortedarray[i]], lon[sortedarray[i]], lat[sortedarray[i+1]], lon[sortedarray[i+1]]);
+		System.out.println(sortedArray.length);
+		for(int i = 0; i < sortedArray.length - 1; i++){
+			
+			// If the schedule does not have GEO data, pass the next schedule
+			int j = i + 1;
+			if(geoData[sortedArray[i]] != null){
+				
+				// Go to the next schedule until the schedule has GEO data
+				while(geoData[sortedArray[i+1]] == null && j < sortedArray.length - 1){
+					j++;
+				}
+				// Calculate the distance when the next schedule has GEO data (for the last data)
+				if(geoData[sortedArray[j]] != null) {
+					distance[sortedArray[i]] = calDistance(lat[sortedArray[i]], lon[sortedArray[i]], lat[sortedArray[j]], lon[sortedArray[j]]);
+				}
+				
+				// Pass the null geo data schedule
+				i = j - 1;
+			}
 		}
 		
 		/*
 		 * insert the distance
 		 */
-		for (int i = 0; i < sortedarray.length - 1; i++) {
+		for (int i = 0; i < sortedArray.length - 1; i++) {
 			
-			insertComment(fileName[sortedarray[i]],event[sortedarray[i]],distance[sortedarray[i]]);
+			insertComment(fileName[sortedArray[i]],event[sortedArray[i]],distance[sortedArray[i]]);
 		}
 		sc.close();
 	}
@@ -186,8 +199,8 @@ public class InsertComment {
     	     event.index = i;
     	     event.fileName = fileNames[i];
     	     
-    	     for(int j = 0; j < 25; j++) {
-    	        if(events[i][j].length() >= 8 && events[i][j].substring(0,8).equals("DTSTART:") ) {
+    	     for(int j = 0; j < events[i].length; j++) {
+    	        if(events[i][j] != null && events[i][j].length() >= 8 && events[i][j].substring(0,8).equals("DTSTART:") ) {
                     dataToAdd = events[i][j].substring(8,events[i][j].length() );
     	        	int indexOfT = dataToAdd.indexOf('T');
     	        	//search for time
@@ -196,7 +209,7 @@ public class InsertComment {
     	        	event.time = Integer.parseInt(dataToAdd); 
     	        	
     	        }
-    	        if(events[i][j].length() >= 4 && events[i][j].substring(0,4).equals("GEO:")  ) {
+    	        if(events[i][j] != null && events[i][j].length() >= 4 && events[i][j].substring(0,4).equals("GEO:")  ) {
     	        	okayToAdd = true;
     	        	break;
     	        }
@@ -242,9 +255,13 @@ public class InsertComment {
 				if(icsData[i] == null){
 					break;
 				}
-				bw.write(icsData[i] + "\n");
-				if(icsData[i].contains("GEO")) {
-					bw.write("COMMENT:" + distance + "\n");
+				
+				// update previous COMMENT data
+				if(!icsData[i].contains("COMMENT:")){
+					bw.write(icsData[i] + "\n");
+					if(icsData[i].contains("GEO") ) {
+						bw.write("COMMENT:" + distance + "\n");
+					}
 				}
 
 			}
@@ -254,5 +271,4 @@ public class InsertComment {
 		}
 
 	}
-
 }
