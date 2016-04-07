@@ -137,46 +137,15 @@ public class InsertComment {
 
 		return dist;
 	}
-	/* code for filtering (if necessary)
-	 //Do we allow the same file to be used more than once?
-
-      example of user input
-	  file1 
-	  file2
-	  file1
-	  file3
-	  file1
-	  
-	  sorts
-	  file1 <- circle distance from file1 to file1
-	  file1 <- circle distance from file1 to file1
-	  file1 <- circle distance from file2 to file1
-	  file2 <- circle distance from file2 to file3
-	  file3<- empty
-	  
-	  
-	  Do we filter files where the two files next to each other
-	  where at least one of them does not contain a correct Geo field?
-	  
-	  file1.geo = null <- cannot calculate <- useless
-	  file2.geo = null <- cannot calculate <- useless
-	  file3.geo = 2,2 <- can calculate <- required to use
-	  file4.geo = 4,4 <- cannot calculate <- required to use
-	 
-	 */
 	
 	/* code for sorting
 	
-	
+	*/
+
+        
 	//Can access like this, int a = map.time
 	//Or add setters and getters
 	private static class FileNamesAndTimes {
-	   //-1 marks a bad/blank time value
-	   //parse the time portion into a int
-	   //Because we use military time
-	   //1704 > 1204
-	   //0404 > 0400
-	   //0499 makes no sense, but I don't know what we can assume about times
 		int time = -1;
 		String fileName;
 		int index;
@@ -193,39 +162,62 @@ public class InsertComment {
 		}
 	} 
 
-    //Assume index of fileName = index of Double Array
-	//Rearrange fileName array Based on time 
-	//do different times need to be taken into consideration?
-	// model 2 contains a 'z', do we assume that the files that are
-	// used are okay?
-    public static void sort(String[][] events, String fileNames,int eventNum) {
+    /**
+     * Filters out fileNames that do not contain geo dates
+     * May want to consider providing info about where the start of the circle dis
+     * tance is to the end,
+     * @param events
+     * @param fileNames
+     * @param eventNum
+     * @return
+     */
+    public static int[] getSorted(String[][] events, String[] fileNames,int eventNum) {
     	PriorityQueue<FileNamesAndTimes> queue;
 		queue = new PriorityQueue<FileNamesAndTimes>(5, new eventCompare() );
 		FileNamesAndTimes event = null;
-		String dataToAdd;
+		boolean okayToAdd = false;
+		String dataToAdd = "";
     	 for(int i = 0; i < eventNum; i++) {
     	     event = new FileNamesAndTimes();
     	     event.index = i;
-    	     event.fileName = fileNames[0];
-    	     for(int j = 0; j < 20; j++) {
-    	        if(events[i][j].contains("DTSTART:") ) {
-    	        	int indexOfT = events[i][j].indexOf('T');
+    	     event.fileName = fileNames[i];
+    	     
+    	     for(int j = 0; j < events.length; j++) {
+    	        if(events[i][j].length() >= 8 && events[i][j].substring(0,8).equals("DTSTART:") ) {
+                    dataToAdd = events[i][j].substring(8,events[i][j].length() );
+                    System.out.println(dataToAdd);
+    	        	int indexOfT = dataToAdd.indexOf('T');
+    	        	System.out.println(indexOfT);
     	        	//search for time
+    	        	System.out.println("b");
     	        	dataToAdd = dataToAdd.substring(indexOfT+1,dataToAdd.length() );
+    	        	System.out.println(dataToAdd);
     	        	//parse it
-    	        	event.time = Integer.parseInt(dataToAdd);
-                    
+    	        	System.out.println(Integer.parseInt(dataToAdd));
+    	        	event.time = Integer.parseInt(dataToAdd); 
+    	        	
+    	        }
+    	        if(events[i][j].length() >= 4 && events[i][j].substring(0,4).equals("GEO:")  ) {
+    	        	okayToAdd = true;
     	        	break;
     	        }
     	        
     	     }
-    	     queue.add(event);
-    	     
+    	     if(okayToAdd) {
+    	    	 queue.add(event);
+    	    	 okayToAdd = false;
+    	     }
     	 }
-    	
+    	 if(queue.size() > 0) {
+    		  int queueSize = queue.size();
+    	      int[] array = new int[queueSize];
+              for(int i = 0; i < queueSize; i++) {
+            	  array[i] = queue.poll().index;
+              }
+    	      return array;
+    	 }
+    	 return null;
     }
-	
-	*/
 	public static void insertComment(String fileName, String[] icsData, double distance) {
 		StringBuilder b = new StringBuilder();
 		b.append("new-");
