@@ -37,5 +37,13 @@ public class InsertCommentTest {
 		System.out.println(array[0]);
 		assertEquals(array[0],1);
 	}
+	
+	@Test
+	public void calDistanceTest(){
+		InsertComment test1 = new InsertComment(); 
+	}
+	public void insertCommentTest(){
+		
+	}
 
 }

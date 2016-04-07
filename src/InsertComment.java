@@ -50,11 +50,20 @@ public class InsertComment {
 		 */
 		String[] geoData = new String[eventNum];
 		for (int i = 0; i < event.length; i++) {
+			Boolean hasgeo = false;
 			for(int j = 0; j < event[i].length; j++) {
-				if(event[i][j].contains("GEO")) {
-					geoData[i] = event[i][j];
+				if(event[i][j].contains("END:VCALENDAR")) {
 					break;
 				}
+				if(event[i][j].contains("GEO")) {
+					geoData[i] = event[i][j];
+					hasgeo = true;
+					break;
+				}
+			}
+			if(!hasgeo){
+				System.err.println("One of your files does not have a Geo field");
+				System.exit(0);
 			}
 		}
 		
@@ -77,19 +86,20 @@ public class InsertComment {
 		/*
 		 *  Calculate distance by input order 
 		 */
-		double distance[] = new double [eventNum - 1];
-		for(int i = 0; i < eventNum - 1; i++){
-			distance[i] = calDistance(lat[i], lon[i], lat[i+1], lon[i+1]);
-			
-			//TODO remove later
-			System.out.println(distance[i]);
+		int sortedarray[] = getSorted(event, fileName, eventNum);
+		double distance[] = new double [eventNum];
+		System.out.println(sortedarray.length);
+		for(int i = 0; i < sortedarray.length - 1; i++){
+			System.out.println("ABCDE" + sortedarray[i]);
+			distance[sortedarray[i]] = calDistance(lat[sortedarray[i]], lon[sortedarray[i]], lat[sortedarray[i+1]], lon[sortedarray[i+1]]);
 		}
 		
 		/*
 		 * insert the distance
 		 */
-		for (int i = 0; i < eventNum - 1; i++) {
-			insertComment(fileName[i],event[i],distance[i]);
+		for (int i = 0; i < sortedarray.length - 1; i++) {
+			
+			insertComment(fileName[sortedarray[i]],event[sortedarray[i]],distance[sortedarray[i]]);
 		}
 		sc.close();
 	}
@@ -132,17 +142,11 @@ public class InsertComment {
 		double dLat = R * (lat2 - lat2);
 		double dLon = R * (lon2 - lon1);
 		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1R) * Math.cos(lat2R) * Math.sin(dLon/2) * Math.sin(dLon/2);
-		double c = 2* Math.asin(Math.sqrt(a));
+		double c = 2 * Math.asin(Math.sqrt(Math.abs(a)));
 		double dist = earthRMetre * c;
-
 		return dist;
 	}
 	
-	/* code for sorting
-	
-	*/
-
-        
 	//Can access like this, int a = map.time
 	//Or add setters and getters
 	private static class FileNamesAndTimes {
@@ -172,6 +176,7 @@ public class InsertComment {
      * @return
      */
     public static int[] getSorted(String[][] events, String[] fileNames,int eventNum) {
+    	
     	PriorityQueue<FileNamesAndTimes> queue;
 		queue = new PriorityQueue<FileNamesAndTimes>(5, new eventCompare() );
 		FileNamesAndTimes event = null;
@@ -182,18 +187,13 @@ public class InsertComment {
     	     event.index = i;
     	     event.fileName = fileNames[i];
     	     
-    	     for(int j = 0; j < events.length; j++) {
+    	     for(int j = 0; j < 25; j++) {
     	        if(events[i][j].length() >= 8 && events[i][j].substring(0,8).equals("DTSTART:") ) {
                     dataToAdd = events[i][j].substring(8,events[i][j].length() );
-                    System.out.println(dataToAdd);
     	        	int indexOfT = dataToAdd.indexOf('T');
-    	        	System.out.println(indexOfT);
     	        	//search for time
-    	        	System.out.println("b");
     	        	dataToAdd = dataToAdd.substring(indexOfT+1,dataToAdd.length() );
-    	        	System.out.println(dataToAdd);
     	        	//parse it
-    	        	System.out.println(Integer.parseInt(dataToAdd));
     	        	event.time = Integer.parseInt(dataToAdd); 
     	        	
     	        }
@@ -220,7 +220,6 @@ public class InsertComment {
     }
 	public static void insertComment(String fileName, String[] icsData, double distance) {
 		StringBuilder b = new StringBuilder();
-		b.append("new-");
 		b.append(fileName);
 
 		for (int i = 0; i < icsData.length; i++) {
