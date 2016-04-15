@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
-
 public class InsertComment {
 
 	public static void main(String[] args) throws IOException {
@@ -55,7 +54,7 @@ public class InsertComment {
 				if(event[i][j].contains("END:VCALENDAR")) {
 					break;
 				}
-				if(event[i][j].contains("GEO")) {
+    	        if(event[i][j] != null && event[i][j].length() >= 4 && event[i][j].substring(0,4).equals("GEO:")  ) {
 					geoData[i] = event[i][j];
 					hasgeo = true;
 					break;
@@ -85,8 +84,11 @@ public class InsertComment {
 		 *  Calculate distance by input order 
 		 */
 		int sortedArray[] = getSorted(event, fileName, eventNum);
+		if (sortedArray == null || sortedArray.length < 2){
+			System.out.println("Needs more than 1 file with Geo field");
+			System.exit(0);
+		}
 		double distance[] = new double [eventNum];
-		System.out.println(sortedArray.length);
 		for(int i = 0; i < sortedArray.length - 1; i++){
 			
 			// If the schedule does not have GEO data, pass the next schedule
@@ -239,7 +241,7 @@ public class InsertComment {
 				break;
 			}
 			System.out.println(icsData[i]);
-			if(icsData[i].contains("GEO")) {
+	        if(icsData[i] != null && icsData[i].length() >= 4 && icsData[i].substring(0,4).equals("GEO:")  ) {
 				System.out.print("COMMENT:" + distance +"\n");
 			}
 		}
@@ -257,9 +259,9 @@ public class InsertComment {
 				}
 				
 				// update previous COMMENT data
-				if(!icsData[i].contains("COMMENT:")){
+				if( !(icsData[i].length() >= 8 && icsData[i].substring(0,8).equals("COMMENT:") )  ) {
 					bw.write(icsData[i] + "\n");
-					if(icsData[i].contains("GEO") ) {
+	    	        if(icsData[i].length() >= 4 && icsData[i].substring(0,4).equals("GEO:")  ) {
 						bw.write("COMMENT:" + distance + "\n");
 					}
 				}

@@ -61,6 +61,8 @@ public class EventCreator {
 	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
 	// private static String eComment = "COMMENT:"; /* Event comment(distance) */
+	private static boolean GeoCheck = true; /* Check if geo field to see if user sets*/
+
 
 	private static String fileName = "NewEvent"; /* default file name */
 
@@ -88,6 +90,13 @@ public class EventCreator {
 		/*
 		 * Input user calendar data
 		 */
+		System.out.print("Welcome, this is the Event Creator program by Team Cinco");
+		System.out.println("Some things you should know:");
+		System.out.println("Timezone is set to HONOLULU by default");
+		System.out.println("Description can only be one line by default");
+		System.out.println("Filenames are by default the date and time of the file created");
+		System.out.println("Geographic position is optional");
+		
 		System.out.print("Enter calendar name(Empty not allowed):");
 		/* Read user data from command line using "stringReader" function */
 		cName += stringReader(sc);
@@ -191,9 +200,11 @@ public class EventCreator {
 		 * Read two float numbers from command line and return combined string
 		 * the value
 		 */
+		GeoCheck = makeOptional(sc,"add the geographical position of your event");
+		if (GeoCheck){
 		System.out.print("Geographical position of your event.\n");
 		eGeo += floatReader(sc);
-
+		}
 		/*
 		 * Reader user input text for information using "stringReader" function
 		 */
@@ -275,6 +286,7 @@ public class EventCreator {
 		Boolean isEmpty = true;
 		String timeInput = null;
 		while (isEmpty) {
+			sc = new Scanner(System.in);
 			System.out.print("event time(hh:mm:ss):");
 			timeInput = sc.next();
 			if (timeInput != null) {
@@ -282,7 +294,7 @@ public class EventCreator {
 					isEmpty = false;
 				} else {
 					timeInput = null;
-					System.out.print("->>> Tha time you input is not valid! -\n- Please enter a valid ");
+					System.out.print("->>> The time you input is not valid! -\n- Please enter a valid ");
 				}
 
 			} else {
@@ -409,7 +421,9 @@ public class EventCreator {
 			// bw.write(eLastMod + "\n");
 
 			/* added two new properties */
+			if (GeoCheck){
 			bw.write(eGeo + "\n");
+			};
 			bw.write(eClass + "\n");
 
 			/* added one new property */
@@ -426,22 +440,28 @@ public class EventCreator {
 
 	}
 
-	// TODO Later
-	/**
-	 * Modify an event
-	 */
-	public static void icsModEvent() {
+    /**
+     * 
+     */
+     private static boolean makeOptional(Scanner sc, String prompt) {
+    	 String option;
+    	 do {
+ 			System.out.println("Would you like to " + prompt + "?");
+ 			System.out.print("Enter 1 for Yes\n" + "Enter 2 for No\n");
+ 			System.out.print("Response: ");
+ 			option = sc.nextLine().trim();
+ 		} while (!option.equals("1") && !option.equals("2") );
 
-	}
 
-	// TODO Later
-	/**
-	 * Add an event
-	 */
-	public static void icsAddEvent() {
-
-	}
-
+ 		if (option.equals("1") ) {
+ 			return true;
+ 		} 
+ 		else {
+ 			return false;
+ 		}
+     }
+    	 
+	
 	/**
 	 * Date validation
 	 * 

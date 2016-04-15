@@ -63,39 +63,5 @@ public class InsertCommentTest {
 		}
 		
 	}
-	@Test
-	public void insertCommentTest() throws FileNotFoundException{
-		Boolean containsGeoAndComment = false;
-		double distance = 100;
-		String[] icsData = 
-		{
-				"BEGIN:VCALENDAR",
-				"PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN",
-				"VERSION:2.0",
-				"CALSCALE:GREGORIAN",
-				"METHOD:PUBLIC",
-				"X-WR-TIMEZONE:HONOLULU",
-				"X-WR-CALNAME:1",
-				"X-WR-CALDESC:1",
-				"BEGIN:VEVENT",
-				"DTSTART:20160407T100000",
-				"DTEND:20160407T103000",
-				"DESCRIPTION:",
-				"LOCATION:POST",
-				"SUMMARY:1",
-				"CREATED:20160407T005155",
-				"CLASS:PUBLIC",
-				"GEO:45.0;45.0",
-				"COMMENT:" + distance,
-				"END:VEVENT",
-				"END:VCALENDAR"	
-		};
-		for (int i = 0; i < icsData.length; i++) {
-			if(icsData[i].contains("GEO") && icsData[i+1].contains("COMMENT")) {
-				containsGeoAndComment = true;
-			}
-		}
-		assertEquals(containsGeoAndComment, true);
-	}
 
 }
