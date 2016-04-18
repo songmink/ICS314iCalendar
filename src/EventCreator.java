@@ -15,6 +15,7 @@ import java.util.Scanner;
  *  @author Songmin Kim
  */
 
+
 /**
  * iCalendar event creator
  */
