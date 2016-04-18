@@ -15,32 +15,17 @@ import java.util.Scanner;
  *  @author Songmin Kim
  */
 
-
 /**
  * iCalendar event creator
  */
 public class EventCreator {
-	public EventCreator() {
 
-	}
-
-	/* Start or end calendar properties */
+	/* Static vairables for ics category. */
 	private static String begin = "BEGIN:";
 	private static String end = "END:";
-
-	/* Program version and product id */
-	private static String version = "VERSION:2.0";
+	private static String version = "VERSION:2.0"; /* Version 2.0 */
 	private static String prodId = "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
-
-	/* Auto input */
 	private static String eCreated = "CREATED:"; /* Event created date time */
-	// private static String eLastMod = "LAST-MODIFIED:"; /* Event last modify date time */
-	// private static String dtStamp = "DTSTAMP:"; /* Calendar date time stamp */
-	// private static String cUid = "UID:"; /* Calendar uid */
-
-	/*
-	 * Possible user input data 13 items
-	 */
 	private static String cScale = "CALSCALE:"; /* Calendar scale */
 	private static String cName = "X-WR-CALNAME:"; /* Calendar name */
 	private static String cDesc = "X-WR-CALDESC:"; /* Calendar description */
@@ -49,59 +34,80 @@ public class EventCreator {
 	private static String dtEnd = "DTEND:"; /* Event end date time */
 	private static String eMethod = "METHOD:"; /* Event method */
 	private static String eDesc = "DESCRIPTION:"; /* Event description */
-	// private static String eSeq = "SEQUENCE:"; /* Event sequence */
-	// private static String eStatus ="STATUS:"; /* Event status */
 	private static String eSummary = "SUMMARY:"; /* Event summary */
 	private static String eLocation = "LOCATION:"; /* Event location */
 	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
-	// private static String eComment = "COMMENT:"; /* Event comment(distance) */
-	private static boolean GeoCheck = true; /* Check if geo field to see if user sets*/
-
-
+	private static boolean GeoCheck = true; /*
+											 * Check if geo field to see if user
+											 * sets
+											 */
 	private static String fileName = "NewEvent"; /* default file name */
 
 	/**
 	 * Main
-	 * 
-	 * @param args
-	 *            ignore
 	 */
 	public static void main(String[] args) {
 		System.out.print("Event creator start.\n");
 
-		/*
-		 * static but can modify from user input
-		 */
+		/* Default value for some static variables */
 		cScale += "GREGORIAN";
 		dtZone += "HONOLULU";
 		eMethod += "PUBLIC";
-		// eStatus += "";
-		// eGeo += "";
 
-		/* open scanner */
+		/* Open scanner for reading user input */
 		Scanner sc = new Scanner(System.in);
 
-		/*
-		 * Input user calendar data
-		 */
+		/* Input user calendar data */
 		System.out.print("Welcome, this is the Event Creator program by Team Cinco");
 		System.out.println("Some things you should know:");
 		System.out.println("Timezone is set to HONOLULU by default");
 		System.out.println("Description can only be one line by default");
 		System.out.println("Filenames are by default the date and time of the file created");
 		System.out.println("Geographic position is optional");
-		
-		System.out.print("Enter calendar name(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		cName += stringReader(sc);
-		System.out.print("Enter calendar description(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		cDesc += stringReader(sc);
-		System.out.print("Enter event summary for title(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		eSummary += stringReader(sc);
 
+		// Loop checker
+		boolean loop = true;
+
+		/* Read calendar name using stringReader */
+		while (loop) {
+			System.out.print("1. Please, Eeter calendar name (Empty not allowed):");
+			try {
+				cName += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Calendar name should exist.");
+			}
+		}
+
+		// loop refresh for new loop
+		loop = true;
+		/* Read calendar description using stringReader */
+		while (loop) {
+			System.out.print("2. Please, enter calendar description (Empty not allowed):");
+			try {
+				cDesc += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Calendar description should exist.");
+			}
+		}
+
+		// loop refresh for new loop
+		loop = true;
+		/* Read event summary using stringReader */
+		while (loop) {
+			System.out.print("3. Please, enter event summary for title Empty not allowed):");
+			try {
+				eSummary += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: event summary should exist.");
+			}		
+		}
+
+
+		// TODO here
 		/*
 		 * Event start date and time reader
 		 */
@@ -119,7 +125,7 @@ public class EventCreator {
 		/* Remove time separator */
 		dtStart += startTime.replace(":", "");
 		/* add UTC mark "Z" */
-		//dtStart += "Z";
+		// dtStart += "Z";
 
 		/*
 		 * Event end date and time reader
@@ -137,9 +143,7 @@ public class EventCreator {
 		/* Remove time separator */
 		dtEnd += endTime.replace(":", "");
 		/* add UTC mark "Z" */
-		//dtEnd += "Z";
-		
-		
+		// dtEnd += "Z";
 
 		/*
 		 * Event validation check
@@ -163,27 +167,7 @@ public class EventCreator {
 		/* Read user input text for information using "stringReader" function */
 		System.out.print("Enter event description(Empty not allowed):");
 		eDesc += stringReader(sc);
-
-		/* Read user input integer for sequence using "intReader" function */
-		// System.out.print("Enter the Sequence(Empty not allowed):");
-		/*
-		 * Read user input using "intReader" function, intReader reads only
-		 * integer value
-		 */
-		// eSeq += intReader();
-
-		// TODO select one of them
-		/*
-		 * print statements are contained in class reader
-		 */
 		eClass += classReader(sc);
-
-		/*
-		 * Second version
-		 */
-		// System.out.print("Enter Class(p for private, c for confidential,
-		// empty enter for public");
-		// eClass += classReader2(sc);
 
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -191,14 +175,10 @@ public class EventCreator {
 		System.out.print("Enter Event Location(Empty not allowed):");
 		eLocation += stringReader(sc);
 
-		/*
-		 * Read two float numbers from command line and return combined string
-		 * the value
-		 */
-		GeoCheck = makeOptional(sc,"add the geographical position of your event");
-		if (GeoCheck){
-		System.out.print("Geographical position of your event.\n");
-		eGeo += floatReader(sc);
+		GeoCheck = makeOptional(sc, "add the geographical position of your event");
+		if (GeoCheck) {
+			System.out.print("Geographical position of your event.\n");
+			eGeo += floatReader(sc);
 		}
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -227,17 +207,15 @@ public class EventCreator {
 	/**
 	 * Read string user information from command line
 	 * 
-	 * @return userIn string for user input string data / empty not allowed
+	 * @return userIn string for user input string data
 	 */
 	public static String stringReader(Scanner sc) {
 		String userIn = null;
-		Boolean isEmpty = true;
+		userIn = sc.nextLine();
 
-		while (isEmpty) {
-			userIn = sc.nextLine();
-			if (userIn != null) {
-				isEmpty = false;
-			}
+		// If data is null, throw the null pointer error.
+		if (userIn.isEmpty()) {
+			throw new NullPointerException("Null data is not allowed.");
 		}
 		return userIn;
 	}
@@ -416,9 +394,10 @@ public class EventCreator {
 			// bw.write(eLastMod + "\n");
 
 			/* added two new properties */
-			if (GeoCheck){
-			bw.write(eGeo + "\n");
-			};
+			if (GeoCheck) {
+				bw.write(eGeo + "\n");
+			}
+			;
 			bw.write(eClass + "\n");
 
 			/* added one new property */
@@ -435,28 +414,25 @@ public class EventCreator {
 
 	}
 
-    /**
-     * 
-     */
-     private static boolean makeOptional(Scanner sc, String prompt) {
-    	 String option;
-    	 do {
- 			System.out.println("Would you like to " + prompt + "?");
- 			System.out.print("Enter 1 for Yes\n" + "Enter 2 for No\n");
- 			System.out.print("Response: ");
- 			option = sc.nextLine().trim();
- 		} while (!option.equals("1") && !option.equals("2") );
+	/**
+	 * 
+	 */
+	private static boolean makeOptional(Scanner sc, String prompt) {
+		String option;
+		do {
+			System.out.println("Would you like to " + prompt + "?");
+			System.out.print("Enter 1 for Yes\n" + "Enter 2 for No\n");
+			System.out.print("Response: ");
+			option = sc.nextLine().trim();
+		} while (!option.equals("1") && !option.equals("2"));
 
+		if (option.equals("1")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
- 		if (option.equals("1") ) {
- 			return true;
- 		} 
- 		else {
- 			return false;
- 		}
-     }
-    	 
-	
 	/**
 	 * Date validation
 	 * 
@@ -525,7 +501,7 @@ public class EventCreator {
 		int m = Integer.parseInt(hms[1], 10);
 		int s = Integer.parseInt(hms[2], 10);
 		/* check the time validation */
-		if (0 > h || 23 < h || 0 > m || 59 < m || 0 <s || 59 < s) {
+		if (0 > h || 23 < h || 0 > m || 59 < m || 0 < s || 59 < s) {
 			return false;
 		}
 		return true;
