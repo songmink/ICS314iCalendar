@@ -38,11 +38,10 @@ public class EventCreator {
 	private static String eLocation = "LOCATION:"; /* Event location */
 	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
-	private static boolean GeoCheck = true; /*
-											 * Check if geo field to see if user
-											 * sets
-											 */
 	private static String fileName = "NewEvent"; /* default file name */
+	
+	/* geo Field option	 */
+	private static boolean GeoCheck = true; 
 
 	/**
 	 * Main
