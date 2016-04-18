@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -39,9 +40,9 @@ public class EventCreator {
 	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
 	private static String fileName = "NewEvent"; /* default file name */
-	
-	/* geo Field option	 */
-	private static boolean GeoCheck = true; 
+
+	/* geo Field option */
+	private static boolean GeoCheck = true;
 
 	/**
 	 * Main
@@ -79,7 +80,7 @@ public class EventCreator {
 			}
 		}
 
-		// loop refresh for new loop
+		// Refresh loop for new loop
 		loop = true;
 		/* Read calendar description using stringReader */
 		while (loop) {
@@ -102,29 +103,41 @@ public class EventCreator {
 				loop = false;
 			} catch (NullPointerException e) {
 				System.out.println("\n*** Warning: event summary should exist.");
-			}		
+			}
 		}
 
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event start date */
+		String startDate = null;
+		while (loop) {
+			System.out.print("Please, enter event start date (format:yyyy/mm/dd):");
+			try {
+				startDate = dateReader(sc);
+				dtStart += startDate.replace("/", ""); // Remove separators
+				dtStart += "T"; // add date and time separator "T"
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The date is invalid.");
+			}
+		}
+		
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event start time */
+		while(loop) {
+			System.out.print("Please, enter evnet start time (format(24hr):HH:mm:ss)");
+			try {
+				String startTime = timeReader(sc);
+				dtStart += startTime.replace(":", ""); /* Remove time separator */
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.print("\n*** Warning: The time is invalid.");
+			}
+		}
+		
 
 		// TODO here
-		/*
-		 * Event start date and time reader
-		 */
-		System.out.print("Enter start ");
-		/* Read user data from command line using "dateReader" function */
-		String startDate = dateReader(sc);
-		/* Remove separators */
-		dtStart += startDate.replace("/", "");
-		/* add date and time separator "T" */
-		dtStart += "T";
-		/* event start time */
-		System.out.print("Enter start");
-		/* Read user data from command line using "timeReader" function */
-		String startTime = timeReader(sc);
-		/* Remove time separator */
-		dtStart += startTime.replace(":", "");
-		/* add UTC mark "Z" */
-		// dtStart += "Z";
 
 		/*
 		 * Event end date and time reader
@@ -214,7 +227,7 @@ public class EventCreator {
 
 		// If data is null, throw the null pointer error.
 		if (userIn.isEmpty()) {
-			throw new NullPointerException("Null data is not allowed.");
+			throw new NullPointerException("Error: Null data is not allowed.");
 		}
 		return userIn;
 	}
@@ -222,29 +235,16 @@ public class EventCreator {
 	/**
 	 * Date reader
 	 * 
-	 * @return String date
+	 * @param sc
+	 * @return string or throw an error
 	 */
 	public static String dateReader(Scanner sc) {
-		Boolean isEmpty = true;
 		String dateInput = null;
-		while (isEmpty) {
-			System.out.print("event date(yyyy/mm/dd):");
-			dateInput = sc.next();
+		dateInput = sc.next();
+		dateInput = dateInput.trim();
 
-			if (dateInput != null) {
-				dateInput = dateInput.trim();
-
-				/* Date validation check */
-				if (isValidDate(dateInput)) {
-					isEmpty = false;
-				} else {
-					/* Reset input data */
-					dateInput = null;
-					System.out.print("->>> The date you input is not valid! -\n- Please enter a valid ");
-				}
-			} else {
-				System.out.print("->>> The date you input is not valid! -\n- Please enter the valid ");
-			}
+		if (dateInput.isEmpty() || !isValidDate(dateInput)) {
+			throw new InputMismatchException("Error: Empty or invalid date.");
 		}
 		return dateInput;
 	}
@@ -255,26 +255,16 @@ public class EventCreator {
 	 * @return String time with hhmmss format
 	 */
 	public static String timeReader(Scanner sc) {
-		Boolean isEmpty = true;
 		String timeInput = null;
-		while (isEmpty) {
-			sc = new Scanner(System.in);
-			System.out.print("event time(hh:mm:ss):");
-			timeInput = sc.next();
-			if (timeInput != null) {
-				if (isValidTime(timeInput)) {
-					isEmpty = false;
-				} else {
-					timeInput = null;
-					System.out.print("->>> The time you input is not valid! -\n- Please enter a valid ");
-				}
+		timeInput = sc.next();
 
-			} else {
-				System.out.print("->>> The time you input is not valid! -\n- Plaese enter a valid");
-			}
+		if (timeInput.isEmpty() || !isValidTime(timeInput)) {
+			throw new InputMismatchException("Error: Empty or invalid time.");
 		}
 		return timeInput;
 	}
+
+	// TODO here
 
 	/**
 	 * Read integer user information from command line
