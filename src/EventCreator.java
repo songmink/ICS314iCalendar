@@ -191,7 +191,7 @@ public class EventCreator {
 		loop = true;
 		/* Read Description */
 		while(loop) {
-			System.out.print("Enter event description(Empty not allowed):");
+			System.out.print("Please, enter event description(Empty not allowed):");
 			try {
 				eDesc += stringReader(sc);
 				loop = false;
@@ -204,12 +204,12 @@ public class EventCreator {
 		loop = true;
 		/* Read class */
 		while(loop) {
-			System.out.print("Enter event description(Empty not allowed):");
+			System.out.print("Please, enter event class(p for private, c for confidencial, empty for public):");
 			try {
 				eClass += classReader(sc);
 				loop = false;
-			} catch (NullPointerException e) {
-				System.out.println("\n*** Warning: Empty is not allowed.");
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: Input mismatch.");
 			}			
 		}
 		
@@ -252,7 +252,7 @@ public class EventCreator {
 				System.out.print("Please, enter your event location latitude (Range: -180.0 < y < 180.0)");
 				try {
 					lon = lonReader(sc);
-					loop = true;
+					loop = false;
 				} catch (InputMismatchException e) {
 					System.out.println("\n*** Warning: Range is invalid");
 				}
@@ -293,8 +293,6 @@ public class EventCreator {
 			/* Static DO NOT EARASE! */
 			bw.write(begin + "VCALENDAR" + "\n");
 
-			// Each item can be disabled
-			// Unused item should be disabled
 			bw.write(prodId + "\n");
 			bw.write(version + "\n");
 			bw.write(cScale + "\n");
@@ -311,8 +309,8 @@ public class EventCreator {
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
 			bw.write(eCreated + "\n");
-
-			/* added two new properties */
+			
+			/* geo option */
 			if (GeoCheck) {
 				bw.write(eGeo + "\n");
 			}
@@ -355,12 +353,12 @@ public class EventCreator {
 	 */
 	public static String dateReader(Scanner sc) {
 		String dateInput = null;
-		dateInput = sc.next();
+		dateInput = sc.nextLine();
 		dateInput = dateInput.trim();
-
+		
 		if (dateInput.isEmpty() || !isValidDate(dateInput)) {
-			throw new InputMismatchException("Error: Empty or invalid date.");
-		}
+			throw new InputMismatchException("Error: Invalid date.");
+		}	
 		return dateInput;
 	}
 
@@ -371,7 +369,7 @@ public class EventCreator {
 	 */
 	public static String timeReader(Scanner sc) {
 		String timeInput = null;
-		timeInput = sc.next();
+		timeInput = sc.nextLine();
 
 		if (timeInput.isEmpty() || !isValidTime(timeInput)) {
 			throw new InputMismatchException("Error: Empty or invalid time.");
@@ -564,81 +562,24 @@ public class EventCreator {
 	}
 
 	/**
-	 * Prompts the user to choose a privacy setting Numbers are used to
-	 * represent options because it is easier to type and verify
-	 * 
-	 * @param scan
-	 * @return privacy (1) returns "PUBLIC" if 1 is entered (2) returns
-	 *         "PRIVATE" if 2 is entered (3) returns "CONFIDENTIAL" if 3 is
-	 *         entered
-	 */
-	public static String classReader(Scanner scan) {
-		String privacy;
-
-		do {
-			System.out.println("Enter Privacy Settings:");
-			System.out.print("Enter 1 for PUBLIC\n" + "Enter 2 for PRIVATE\n" + "Enter 3 for CONFIDENTIAL\n");
-			System.out.print("Response: ");
-			privacy = scan.nextLine().trim();
-		} while (!isValidClass(privacy));
-
-		int option = Integer.parseInt(privacy);
-
-		if (option == 1) {
-			System.out.println("Your privacy was set as PUBLIC");
-			return "PUBLIC";
-		} else if (option == 2) {
-			System.out.println("Your privacy was set as PRIVATE");
-			return "PRIVATE";
-		} else {
-			System.out.println("Your privacy was set as CONFIDENTIAL");
-			return "CONFIDENTIAL";
-		}
-	}
-
-	/**
-	 * Given a String, it checks if 1,2, or 3 was entered.
-	 * 
-	 * @param privacy
-	 * @return (1) true if 1,2, or 3 were given as input (2) false otherwise
-	 */
-	private static boolean isValidClass(String privacy) {
-		if (privacy.equals("1") || privacy.equals("2") || privacy.equals("3") || privacy.isEmpty()) {
-
-			return true;
-		} else {
-			System.out.println("- The setting you input is not valid! -");
-			return false;
-		}
-	}
-
-	/**
 	 * Simple class input
 	 * 
 	 * @param sc
 	 *            for user input
 	 * @return PUBLIC, PRIVATE, or CONFIDENTIAL, default is PUBLIC
 	 */
-	public String classReader2(Scanner sc) {
+	public static String classReader(Scanner sc) {
 		String userIn;
-		boolean loop = false;
 
-		while (!loop) {
-			userIn = sc.nextLine();
-			if (userIn.isEmpty()) {
-				loop = true;
-				return "PUBLIC";
-			} else if (userIn.equals("p")) {
-				loop = true;
-				return "PRIVATE";
-			} else if (userIn.equals("c")) {
-				loop = true;
-				return "CONFIDENTIAL";
-			} else {
-				loop = false;
-				System.out.print("Please, Enter p, c, or empty");
-			}
+		userIn = sc.nextLine();
+		if (userIn.isEmpty()) {
+			return "PUBLIC";
+		} else if (userIn.equals("p")) {
+			return "PRIVATE";
+		} else if (userIn.equals("c")) {
+			return "CONFIDENTIAL";
+		} else {
+			throw new InputMismatchException("Error: Input mismatch.");
 		}
-		return "PUBLIC";
 	}
 }
