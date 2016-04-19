@@ -125,37 +125,48 @@ public class EventCreator {
 		// Refresh loop for new loop
 		loop = true;
 		/* Read event start time */
+		String startTime = null;
 		while(loop) {
-			System.out.print("Please, enter evnet start time (format(24hr):HH:mm:ss)");
+			System.out.print("Please, enter evnet start time (24 hr format - HH:mm:ss)");
 			try {
-				String startTime = timeReader(sc);
+				startTime = timeReader(sc);
 				dtStart += startTime.replace(":", ""); /* Remove time separator */
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.print("\n*** Warning: The time is invalid.");
 			}
 		}
-		
 
-		// TODO here
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event end date */
+		String endDate = null;
+		while (loop) {
+			System.out.print("Please, enter event end date (format: yyyy/mm/dd):");
+			try {
+				endDate = dateReader(sc);
+				dtEnd += endDate.replace("/", ""); // Remove separators 
+				dtEnd += "T"; // Add date and time separator "T" 
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The date is invalid.");
+			}
+		}
 
-		/*
-		 * Event end date and time reader
-		 */
-		System.out.print("Enter end ");
-		/* Read user data from command line using "dateReader" function */
-		String endDate = dateReader(sc);
-		/* Remove separators */
-		dtEnd += endDate.replace("/", "");
-		/* add date and time separator "T" */
-		dtEnd += "T";
-		System.out.print("Enter end ");
-		/* Read user data from command line using "timeReader" function */
-		String endTime = timeReader(sc);
-		/* Remove time separator */
-		dtEnd += endTime.replace(":", "");
-		/* add UTC mark "Z" */
-		// dtEnd += "Z";
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event end time */
+		String endTime = null;
+		while (loop) {
+			System.out.print("Please, enter event end time(24 hr format - HH:mm:ss");
+			try {
+				endTime = timeReader(sc);
+				dtEnd += endTime.replace(":", ""); // Remove time separator 
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The time is invalid.");
+			}
+		}
 
 		/*
 		 * Event validation check
@@ -175,45 +186,103 @@ public class EventCreator {
 			/* program terminate */
 			System.exit(1);
 		}
+		
+		// Refresh loop for new loop
+		loop = true;
+		/* Read Description */
+		while(loop) {
+			System.out.print("Enter event description(Empty not allowed):");
+			try {
+				eDesc += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Empty is not allowed.");
+			}			
+		}
+		
+		// Refresh loop for new loop
+		loop = true;
+		/* Read class */
+		while(loop) {
+			System.out.print("Enter event description(Empty not allowed):");
+			try {
+				eClass += classReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Empty is not allowed.");
+			}			
+		}
+		
+		// Refresh loop for new loop
+		loop = true;
+		/* Read location */
+		while (loop) {
+			System.out.print("Enter Event Location(Empty not allowed):");
+			try {
+				eLocation += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Empty is not allowed.");
+			}
+		}
 
-		/* Read user input text for information using "stringReader" function */
-		System.out.print("Enter event description(Empty not allowed):");
-		eDesc += stringReader(sc);
-		eClass += classReader(sc);
-
-		/*
-		 * Reader user input text for information using "stringReader" function
-		 */
-		System.out.print("Enter Event Location(Empty not allowed):");
-		eLocation += stringReader(sc);
 
 		GeoCheck = makeOptional(sc, "add the geographical position of your event");
 		if (GeoCheck) {
 			System.out.print("Geographical position of your event.\n");
-			eGeo += floatReader(sc);
+			// Refresh loop for new loop
+			loop = true;
+			/* Read latitude */
+			Float lat = null;
+			while (loop) {
+				System.out.print("Please, enter your event location logitude (Range: -90.0 < x < 90.0)");
+				try {
+					lat = latReader(sc);
+					loop = false;
+				} catch (InputMismatchException e) {
+					System.out.println("\n*** Warning: Range is invalid.");
+				}
+			}
+			
+			// Refresh loop for new loop
+			loop = true;
+			/* Read longitude */
+			Float lon = null;
+			while (loop) {
+				System.out.print("Please, enter your event location latitude (Range: -180.0 < y < 180.0)");
+				try {
+					lon = lonReader(sc);
+					loop = true;
+				} catch (InputMismatchException e) {
+					System.out.println("\n*** Warning: Range is invalid");
+				}
+			}
+			// Write the geo data on a category
+			eGeo += Float.toString(lat) + ";" + Float.toString(lon);
 		}
 		/*
 		 * Reader user input text for information using "stringReader" function
 		 */
-		System.out.print("Enter Event File Name:");
-		if (stringReader(sc).isEmpty()) {
-			fileName = currentDate();
-		} else {
+		
+		try {
+			System.out.print("Please, enter event file name:");
 			fileName = stringReader(sc);
+		} catch (NullPointerException e) {
+			System.out.println("\n*** Caution: You did not input your event file name! \nCurrent date will be your evnet file name.");
+			fileName = currentDate();
 		}
+
 		/* close the scanner */
 		sc.close();
 
-		/* Get the current date value from system */
+		/* Time stamp */
 		eCreated += currentDate();
-		/*
-		 * Write out ics file with the user input file name the file name will
-		 * be appended the current date time string automatically.
-		 */
+		
+		/* Write out event data to a file */
 		icsNewEvent(fileName);
 
 		/* Last comment and finish */
-		System.out.print("The " + fileName + " event is created.\n Program End.");
+		System.out.print("*** The " + fileName + " event is created. ***\n Thank you.");
 	}
 
 	/**
@@ -263,78 +332,29 @@ public class EventCreator {
 		}
 		return timeInput;
 	}
-
-	// TODO here
-
-	/**
-	 * Read integer user information from command line
-	 * 
-	 * @return userIn integer for user input integer data / empty not allowed
-	 */
-	public static int intReader(Scanner sc) {
-		int userIn = 1;
-		Boolean isEmpty = true;
-
-		while (isEmpty) {
-			/* read only integer */
-			while (!sc.hasNextInt()) {
-				userIn = sc.nextInt();
-			}
-		}
-		return userIn;
-	}
-
+	
 	/*
-	 * float number reader from command line
+	 * Latitude reader
 	 */
-	public static String floatReader(Scanner sc) {
-		/* sample Geographic data POST */
-		/* https://www.google.com/maps/@21.2973964,-157.8162139,19.55z */
-		/* Default geographical position */
+	public static float latReader(Scanner sc) {
 		float lat = 21.2973964f;
-		float lon = -157.8162139f;
-
-		Boolean checker = false;
-		while (!checker) {
-			try {
-				System.out.print("Enter your event location latitude as a float number.(Range:-90.0 to 90.0)");
-				lat = sc.nextFloat();
-				checker = true;
-
-				/* For latitude: -90 < lon < 90 */
-				if (-90.0 > lat || lat > 90.0) {
-					System.out.print("->>> Please, ");
-					checker = false;
-				}
-			} catch (Exception InputMismatchException) {
-				System.out.print("->>> The latitude should be a float number. Please, ");
-				checker = false;
-				sc.next();
-			}
+		lat = sc.nextFloat();
+		if(lat < -90.0 || 90.0 < lat) {
+			throw new InputMismatchException("Error: Out of range.");
 		}
-
-		checker = false;
-		while (!checker) {
-			try {
-				System.out.print("Enter your event location longitude as a float number.(Ragen:-180.0 to 180.0)");
-				lon = sc.nextFloat();
-				checker = true;
-
-				/* For Longitude: -180 < lat < 180 */
-				if (-180.0 > lon || lon > 180.0) {
-					System.out.print("->>> Please, ");
-					checker = false;
-				}
-			} catch (Exception InputMissmatchException) {
-				System.out.print("->>> The logitude should be a float number. Please, ");
-				checker = false;
-				sc.next();
-			}
+		return lat;
+	}
+	
+	/**
+	 * Longitude reader 
+	 */
+	public static float lonReader(Scanner sc) {
+		float lot = -157.8162139f;
+		lot = sc.nextFloat();
+		if(lot < -180.0 || 180.0 < lot) {
+			throw new InputMismatchException("Error: Out of range.");
 		}
-		/* Change the latitude and the longitude and combine */
-
-		String latLon = Float.toString(lat) + ";" + Float.toString(lon);
-		return latLon;
+		return lot;
 	}
 
 	/**
@@ -367,30 +387,18 @@ public class EventCreator {
 
 			/* Static */
 			bw.write(begin + "VEVENT" + "\n");
-
-			// Each item can be disabled
-			// Unused item should be disabled
-			// bw.write(cUid + "\n");
 			bw.write(dtStart + "\n");
 			bw.write(dtEnd + "\n");
 			bw.write(eDesc + "\n");
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
 			bw.write(eCreated + "\n");
-			// bw.write(eSeq + "\n");
-			// bw.write(eStatus + "\n");
-			// bw.write(dtStamp + "\n");
-			// bw.write(eLastMod + "\n");
 
 			/* added two new properties */
 			if (GeoCheck) {
 				bw.write(eGeo + "\n");
 			}
-			;
 			bw.write(eClass + "\n");
-
-			/* added one new property */
-			// bw.write(eComment + "\n");
 
 			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
@@ -398,13 +406,13 @@ public class EventCreator {
 
 			bw.close();
 		} catch (IOException e) {
+			System.out.println("\n*** Warning: File write error.");
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
-	 * 
+	 * Geo data option
 	 */
 	private static boolean makeOptional(Scanner sc, String prompt) {
 		String option;
