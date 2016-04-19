@@ -17,6 +17,7 @@ public class EventCreatorTest {
 			Scanner sc = new Scanner("");
 			EventCreator.stringReader(sc);
 		} catch (Exception e) {
+			// Nothing means there is an exception
 		}
 	}
 
@@ -102,6 +103,11 @@ public class EventCreatorTest {
 		sc = new Scanner("c");
 		result = EventCreator.classReader(sc);
 		assertEquals("CONFIDENTIAL", result);
+		try {
+			sc = new Scanner("fafaf");
+		} catch (Exception e) {
+			// Nothing means there is an exception
+		}
 	}
 
 }
