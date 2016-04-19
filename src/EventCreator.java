@@ -121,16 +121,17 @@ public class EventCreator {
 				System.out.println("\n*** Warning: The date is invalid.");
 			}
 		}
-		
+
 		// Refresh loop for new loop
 		loop = true;
 		/* Read event start time */
 		String startTime = null;
-		while(loop) {
+		while (loop) {
 			System.out.print("Please, enter evnet start time (24 hr format - HH:mm:ss)");
 			try {
 				startTime = timeReader(sc);
-				dtStart += startTime.replace(":", ""); /* Remove time separator */
+				dtStart += startTime.replace(":",
+						""); /* Remove time separator */
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.print("\n*** Warning: The time is invalid.");
@@ -145,8 +146,8 @@ public class EventCreator {
 			System.out.print("Please, enter event end date (format: yyyy/mm/dd):");
 			try {
 				endDate = dateReader(sc);
-				dtEnd += endDate.replace("/", ""); // Remove separators 
-				dtEnd += "T"; // Add date and time separator "T" 
+				dtEnd += endDate.replace("/", ""); // Remove separators
+				dtEnd += "T"; // Add date and time separator "T"
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.println("\n*** Warning: The date is invalid.");
@@ -161,7 +162,7 @@ public class EventCreator {
 			System.out.print("Please, enter event end time(24 hr format - HH:mm:ss");
 			try {
 				endTime = timeReader(sc);
-				dtEnd += endTime.replace(":", ""); // Remove time separator 
+				dtEnd += endTime.replace(":", ""); // Remove time separator
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.println("\n*** Warning: The time is invalid.");
@@ -186,33 +187,33 @@ public class EventCreator {
 			/* program terminate */
 			System.exit(1);
 		}
-		
+
 		// Refresh loop for new loop
 		loop = true;
 		/* Read Description */
-		while(loop) {
+		while (loop) {
 			System.out.print("Please, enter event description(Empty not allowed):");
 			try {
 				eDesc += stringReader(sc);
 				loop = false;
 			} catch (NullPointerException e) {
 				System.out.println("\n*** Warning: Empty is not allowed.");
-			}			
+			}
 		}
-		
+
 		// Refresh loop for new loop
 		loop = true;
 		/* Read class */
-		while(loop) {
+		while (loop) {
 			System.out.print("Please, enter event class(p for private, c for confidencial, empty for public):");
 			try {
 				eClass += classReader(sc);
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.println("\n*** Warning: Input mismatch.");
-			}			
+			}
 		}
-		
+
 		// Refresh loop for new loop
 		loop = true;
 		/* Read location */
@@ -225,7 +226,6 @@ public class EventCreator {
 				System.out.println("\n*** Warning: Empty is not allowed.");
 			}
 		}
-
 
 		GeoCheck = makeOptional(sc, "add the geographical position of your event");
 		if (GeoCheck) {
@@ -243,7 +243,7 @@ public class EventCreator {
 					System.out.println("\n*** Warning: Range is invalid.");
 				}
 			}
-			
+
 			// Refresh loop for new loop
 			loop = true;
 			/* Read longitude */
@@ -263,12 +263,13 @@ public class EventCreator {
 		/*
 		 * Reader user input text for information using "stringReader" function
 		 */
-		
+
 		try {
 			System.out.print("Please, enter event file name:");
 			fileName = stringReader(sc);
 		} catch (NullPointerException e) {
-			System.out.println("\n*** Caution: You did not input your event file name! \nCurrent date will be your evnet file name.");
+			System.out.println(
+					"\n*** Caution: You did not input your event file name! \nCurrent date will be your evnet file name.");
 			fileName = currentDate();
 		}
 
@@ -277,7 +278,7 @@ public class EventCreator {
 
 		/* Time stamp */
 		eCreated += currentDate();
-		
+
 		/* Write a file */
 		StringBuilder b = new StringBuilder();
 		b.append(fileName);
@@ -309,7 +310,7 @@ public class EventCreator {
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
 			bw.write(eCreated + "\n");
-			
+
 			/* geo option */
 			if (GeoCheck) {
 				bw.write(eGeo + "\n");
@@ -323,7 +324,7 @@ public class EventCreator {
 			bw.close();
 		} catch (IOException e) {
 			System.out.println("\n*** Warning: File write error.");
-		}		
+		}
 
 		/* Last comment and finish */
 		System.out.print("*** The " + fileName + " event is created. ***\n Thank you.");
@@ -355,10 +356,10 @@ public class EventCreator {
 		String dateInput = null;
 		dateInput = sc.nextLine();
 		dateInput = dateInput.trim();
-		
+
 		if (dateInput.isEmpty() || !isValidDate(dateInput)) {
 			throw new InputMismatchException("Error: Invalid date.");
-		}	
+		}
 		return dateInput;
 	}
 
@@ -376,26 +377,26 @@ public class EventCreator {
 		}
 		return timeInput;
 	}
-	
+
 	/*
 	 * Latitude reader
 	 */
 	public static float latReader(Scanner sc) {
 		float lat = 21.2973964f;
 		lat = sc.nextFloat();
-		if(lat < -90.0 || 90.0 < lat) {
+		if (lat < -90.0 || 90.0 < lat) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
 		return lat;
 	}
-	
+
 	/**
-	 * Longitude reader 
+	 * Longitude reader
 	 */
 	public static float lonReader(Scanner sc) {
 		float lot = -157.8162139f;
 		lot = sc.nextFloat();
-		if(lot < -180.0 || 180.0 < lot) {
+		if (lot < -180.0 || 180.0 < lot) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
 		return lot;
