@@ -3,12 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * 
- */
-
-/**
  * @author Lucas
- *
  */
 public class InsertCommentTest {
 
@@ -30,6 +25,7 @@ public class InsertCommentTest {
 		assertEquals(array[0],1);
 	}
 	
+	/* Created by Songmin Kim */
 	@Test
 	public void calDistanceTest(){
 		double[] lat1 = {-45, 0, 45};
@@ -50,7 +46,8 @@ public class InsertCommentTest {
 			if ( r > (answer[i] - 5)) {
 				min = true;
 			}
-			assertEquals(max, min);
+			assertEquals(max, true);
+			assertEquals(min, true);
 		}
 		
 	}
