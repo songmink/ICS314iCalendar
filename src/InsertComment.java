@@ -167,9 +167,6 @@ public class InsertComment {
 		int time = -1;
 		String fileName;
 		int index;
-		public FileNamesAndTimes() {
-			
-		}	
 	}
 	
 	public static class eventCompare implements Comparator<FileNamesAndTimes> {

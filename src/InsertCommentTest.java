@@ -1,12 +1,6 @@
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import org.junit.Test;
-
-import static org.junit.Assert.assertThat;
 
 /**
  * 
@@ -20,7 +14,6 @@ public class InsertCommentTest {
 
 	@Test
 	public void testSort() {
-		InsertComment test = new InsertComment();
 		String[][] events = new String[2][2];
 		
 		events[0][1] = "GEO:";
@@ -32,15 +25,13 @@ public class InsertCommentTest {
 		fileNames[0] = "abc.ics";
 		fileNames[1] = "abcde.ics";
 		int[] array;
-		array = test.getSorted(events, fileNames, 2);
+		array = InsertComment.getSorted(events, fileNames, 2);
 		//System.out.println(array[0]);
 		assertEquals(array[0],1);
 	}
 	
 	@Test
 	public void calDistanceTest(){
-		InsertComment test = new InsertComment();
-		double d = 0;
 		double[] lat1 = {-45, 0, 45};
 		double[] lon1 = {-90, 0, 90};
 		double[] lat2 = {0, 45, 90};
@@ -50,7 +41,7 @@ public class InsertCommentTest {
 		for(int i = 0; i < lat1.length; i++) {
 			Boolean max = false;
 			Boolean min = false;
-			double result = test.calDistance(lat1[i], lon1[i], lat2[i], lon2[i]);
+			double result = InsertComment.calDistance(lat1[i], lon1[i], lat2[i], lon2[i]);
 			int r = (int) result;
 			//System.out.println("Distance:" + r);
 			if ( r < (answer[i] + 5)){
