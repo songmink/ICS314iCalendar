@@ -278,8 +278,54 @@ public class EventCreator {
 		/* Time stamp */
 		eCreated += currentDate();
 		
-		/* Write out event data to a file */
-		icsNewEvent(fileName);
+		/* Write a file */
+		StringBuilder b = new StringBuilder();
+		b.append(fileName);
+		b.append(".ics");
+		try {
+			File file = new File(b.toString());
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			/* Static DO NOT EARASE! */
+			bw.write(begin + "VCALENDAR" + "\n");
+
+			// Each item can be disabled
+			// Unused item should be disabled
+			bw.write(prodId + "\n");
+			bw.write(version + "\n");
+			bw.write(cScale + "\n");
+			bw.write(eMethod + "\n");
+			bw.write(dtZone + "\n");
+			bw.write(cName + "\n");
+			bw.write(cDesc + "\n");
+
+			/* Static */
+			bw.write(begin + "VEVENT" + "\n");
+			bw.write(dtStart + "\n");
+			bw.write(dtEnd + "\n");
+			bw.write(eDesc + "\n");
+			bw.write(eLocation + "\n");
+			bw.write(eSummary + "\n");
+			bw.write(eCreated + "\n");
+
+			/* added two new properties */
+			if (GeoCheck) {
+				bw.write(eGeo + "\n");
+			}
+			bw.write(eClass + "\n");
+
+			/* Static DO NOT EARASE! */
+			bw.write(end + "VEVENT" + "\n");
+			bw.write(end + "VCALENDAR" + "\n");
+
+			bw.close();
+		} catch (IOException e) {
+			System.out.println("\n*** Warning: File write error.");
+		}		
 
 		/* Last comment and finish */
 		System.out.print("*** The " + fileName + " event is created. ***\n Thank you.");
@@ -355,60 +401,6 @@ public class EventCreator {
 			throw new InputMismatchException("Error: Out of range.");
 		}
 		return lot;
-	}
-
-	/**
-	 * Write a new event
-	 */
-	public static void icsNewEvent(String fileName) {
-		StringBuilder b = new StringBuilder();
-		b.append(fileName);
-		b.append(".ics");
-		try {
-			File file = new File(b.toString());
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-
-			/* Static DO NOT EARASE! */
-			bw.write(begin + "VCALENDAR" + "\n");
-
-			// Each item can be disabled
-			// Unused item should be disabled
-			bw.write(prodId + "\n");
-			bw.write(version + "\n");
-			bw.write(cScale + "\n");
-			bw.write(eMethod + "\n");
-			bw.write(dtZone + "\n");
-			bw.write(cName + "\n");
-			bw.write(cDesc + "\n");
-
-			/* Static */
-			bw.write(begin + "VEVENT" + "\n");
-			bw.write(dtStart + "\n");
-			bw.write(dtEnd + "\n");
-			bw.write(eDesc + "\n");
-			bw.write(eLocation + "\n");
-			bw.write(eSummary + "\n");
-			bw.write(eCreated + "\n");
-
-			/* added two new properties */
-			if (GeoCheck) {
-				bw.write(eGeo + "\n");
-			}
-			bw.write(eClass + "\n");
-
-			/* Static DO NOT EARASE! */
-			bw.write(end + "VEVENT" + "\n");
-			bw.write(end + "VCALENDAR" + "\n");
-
-			bw.close();
-		} catch (IOException e) {
-			System.out.println("\n*** Warning: File write error.");
-			e.printStackTrace();
-		}
 	}
 
 	/**
