@@ -57,7 +57,7 @@ public class InsertComment {
 		
 
 		/*
-		 * find geo data / need function ???
+		 * find geo data 
 		 */
 		String[] geoData = new String[eventNum];
 		for (int i = 0; i < event.length; i++) {
@@ -95,7 +95,7 @@ public class InsertComment {
 		/*
 		 *  Calculate distance by input order 
 		 */
-		int sortedArray[] = getSorted(event, fileName, eventNum);
+		int sortedArray[] = getSorted(event, eventNum);
 		if (sortedArray == null || sortedArray.length < 2){
 			System.out.println("Needs more than 1 file with Geo field");
 			System.exit(0);
@@ -186,21 +186,17 @@ public class InsertComment {
 	 * and other data would be found for a event file.
 	 * @author Lucas Calabrese
 	 */
-	private static class FileNamesAndTimes {
+	private static class IndexesAndTimes {
 		int time = -1;
-		String fileName;
 		int index;
-		public FileNamesAndTimes() {
-			
-		}	
 	}
 	
-        /**
+    /**
 	 * Comparator for a priority queue that will help sort the event files
 	 * @author Lucas Calabrese
 	 */
-	public static class eventCompare implements Comparator<FileNamesAndTimes> {
-		public int compare(FileNamesAndTimes event1, FileNamesAndTimes event2) {			
+	public static class eventCompare implements Comparator<IndexesAndTimes> {
+		public int compare(IndexesAndTimes event1, IndexesAndTimes event2) {			
 			return event1.time - event2.time;
 		}
 	} 
@@ -217,17 +213,16 @@ public class InsertComment {
      *                     the fileNames in sorted order
      *         (2) null  - if there were no files to sort 
      */
-    public static int[] getSorted(String[][] events, String[] fileNames,int eventNum) {
+    public static int[] getSorted(String[][] events, int eventNum) {
     	
-    	PriorityQueue<FileNamesAndTimes> queue;
-		queue = new PriorityQueue<FileNamesAndTimes>(5, new eventCompare() );
-		FileNamesAndTimes event = null;
+    	PriorityQueue<IndexesAndTimes> queue;
+		queue = new PriorityQueue<IndexesAndTimes>(5, new eventCompare() );
+		IndexesAndTimes event = null;
 		boolean okayToAdd = false;
 		String dataToAdd = "";
     	 for(int i = 0; i < eventNum; i++) {
-    	     event = new FileNamesAndTimes();
+    	     event = new IndexesAndTimes();
     	     event.index = i;
-    	     event.fileName = fileNames[i];
     	     
     	     for(int j = 0; j < events[i].length; j++) {
     	        if(events[i][j] != null && events[i][j].length() >= 8 && events[i][j].substring(0,8).equals("DTSTART:") ) {
