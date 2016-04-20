@@ -1,4 +1,12 @@
-
+/**
+ * Accepts files that were created by EventCreator
+ * and looks for usable files and writes the great circle
+ * distance between two events
+ * in the comment field of the event that occurs first
+ * It does this for every file that contains a geo field,only if
+ * an event that occurs after it contains the geo field
+ * @author Song Min Kim, Lucas Calabrese, Nicholas Winters
+ */
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,7 +18,11 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class InsertComment {
-
+ 	/**
+   	 * the main method
+    	 * @param args
+         * @throws IOException
+         */
 	public static void main(String[] args) throws IOException {
 		
 		/* default event number and category number */
@@ -121,11 +133,11 @@ public class InsertComment {
 
 	/**
 	 * Event file reader
+	 * Stores the text within a file into an array that can only contain up to 20 lines
 	 * @param string filename
 	 * @return string array
 	 * @throws IOException 
-	 */
-	
+	 */	
 	public static String[] eventReader(String filename) throws IOException {
 		FileReader fr = new FileReader(filename);
 		BufferedReader br = new BufferedReader(fr);
@@ -140,8 +152,16 @@ public class InsertComment {
 		return cat;
 	}
 
-	/*
-	 * I used the first formula of wikipedia, haversin, but the distance is a bit large...
+	/**
+	 * Uses the haversine function formula
+	 * from https://en.wikipedia.org/wiki/Great-circle_distance
+	 * Calculates the great circle distance given the latitude and
+	 * longitude of two events
+	 * @param lat1 the latitude of the first occurring event
+	 * @param lon1 the longitude of the first occurring event
+	 * @param lat2 the latitude of the second occurring event
+	 * @param lon2 the longitude of the second occurring event
+	 * @return dist the great circle distance
 	 */
 	public static double calDistance(double lat1, double lon1, double lat2, double lon2) {
 		// same position
@@ -161,8 +181,11 @@ public class InsertComment {
 		return dist;
 	}
 	
-	//Can access like this, int a = map.time
-	//Or add setters and getters
+	/**
+	 * Object that contains the index of where a fileName, 
+	 * and other data would be found for a event file.
+	 * @author Lucas Calabrese
+	 */
 	private static class FileNamesAndTimes {
 		int time = -1;
 		String fileName;
@@ -172,9 +195,11 @@ public class InsertComment {
 		}	
 	}
 	
+        /**
+	 * Comparator for a priority queue that will help sort the event files
+	 * @author Lucas Calabrese
+	 */
 	public static class eventCompare implements Comparator<FileNamesAndTimes> {
-		//If order is incorrect, subtract event2 from event1
-	    //I'm somewhat sure that they are meant to be for the same date,
 		public int compare(FileNamesAndTimes event1, FileNamesAndTimes event2) {			
 			return event1.time - event2.time;
 		}
@@ -182,12 +207,15 @@ public class InsertComment {
 
     /**
      * Filters out fileNames that do not contain geo dates
-     * May want to consider providing info about where the start of the circle dis
-     * tance is to the end,
-     * @param events
-     * @param fileNames
-     * @param eventNum
-     * @return
+     * and creates an array where the first index contains the
+     * index of the index of first occurring event within the event array
+     * for the file array and other arrays within this class, the 2nd index,
+     * contains the 2nd index contains the index of the second occurring event and so on
+     * @param events the double array that contains the text of each entered file
+     * @param eventNum the amount of events entered
+     * @return (1) array - an integer array that contains the indexes of 
+     *                     the fileNames in sorted order
+     *         (2) null  - if there were no files to sort 
      */
     public static int[] getSorted(String[][] events, String[] fileNames,int eventNum) {
     	
@@ -232,6 +260,13 @@ public class InsertComment {
     	 }
     	 return null;
     }
+
+    	/**
+    	 * To do
+    	 * @param fileName
+    	 * @param icsData
+     	 * @param distance
+    	 */
 	public static void insertComment(String fileName, String[] icsData, double distance) {
 		StringBuilder b = new StringBuilder();
 		b.append(fileName);
