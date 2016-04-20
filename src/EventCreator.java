@@ -12,7 +12,7 @@ import java.util.Scanner;
  * ICS 314 Spring 2016 iCalendar project
  * 
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
- *  Due date: 02/25/2016
+ *  Due date: 04/29/2016
  *  @author Songmin Kim
  */
 
@@ -21,7 +21,7 @@ import java.util.Scanner;
  */
 public class EventCreator {
 
-	/* Static vairables for ics category. */
+	/* Static variables for ICS category. */
 	private static String begin = "BEGIN:";
 	private static String end = "END:";
 	private static String version = "VERSION:2.0"; /* Version 2.0 */
@@ -71,7 +71,7 @@ public class EventCreator {
 
 		/* Read calendar name using stringReader */
 		while (loop) {
-			System.out.print("1. Please, Eeter calendar name (Empty not allowed):");
+			System.out.print("1. Please, Enter calendar name (Empty not allowed):");
 			try {
 				cName += stringReader(sc);
 				loop = false;
@@ -127,7 +127,7 @@ public class EventCreator {
 		/* Read event start time */
 		String startTime = null;
 		while (loop) {
-			System.out.print("Please, enter evnet start time (24 hr format - HH:mm:ss)");
+			System.out.print("Please, enter event start time (24 hr format - HH:mm:ss)");
 			try {
 				startTime = timeReader(sc);
 				dtStart += startTime.replace(":",
@@ -159,7 +159,7 @@ public class EventCreator {
 		/* Read event end time */
 		String endTime = null;
 		while (loop) {
-			System.out.print("Please, enter event end time(24 hr format - HH:mm:ss");
+			System.out.print("Please, enter event end time(24 hr format - hh:mm:ss");
 			try {
 				endTime = timeReader(sc);
 				dtEnd += endTime.replace(":", ""); // Remove time separator
@@ -235,7 +235,7 @@ public class EventCreator {
 			/* Read latitude */
 			Float lat = null;
 			while (loop) {
-				System.out.print("Please, enter your event location logitude (Range: -90.0 < x < 90.0)");
+				System.out.print("Please, enter your event location logitude (Range: -90.0 <= x <= 90.0)");
 				try {
 					lat = latReader(sc);
 					loop = false;
@@ -249,7 +249,7 @@ public class EventCreator {
 			/* Read longitude */
 			Float lon = null;
 			while (loop) {
-				System.out.print("Please, enter your event location latitude (Range: -180.0 < y < 180.0)");
+				System.out.print("Please, enter your event location latitude (Range: -180.0 <= y <= 180.0)");
 				try {
 					lon = lonReader(sc);
 					loop = false;
@@ -366,7 +366,7 @@ public class EventCreator {
 	/**
 	 * Time reader
 	 * 
-	 * @return String time with hhmmss format
+	 * @return String time with hh:mm:ss format
 	 */
 	public static String timeReader(Scanner sc) {
 		String timeInput = null;
@@ -378,7 +378,7 @@ public class EventCreator {
 		return timeInput;
 	}
 
-	/*
+	/**
 	 * Latitude reader
 	 */
 	public static float latReader(Scanner sc) {

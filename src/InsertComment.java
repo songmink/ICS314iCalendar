@@ -179,8 +179,8 @@ public class InsertComment {
 
     /**
      * Filters out fileNames that do not contain geo dates
-     * May want to consider providing info about where the start of the circle dis
-     * tance is to the end,
+     * May want to consider providing info about where the start of the circle distance
+     * is to the end,
      * @param events
      * @param fileNames
      * @param eventNum

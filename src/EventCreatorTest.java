@@ -23,7 +23,7 @@ public class EventCreatorTest {
 
 	@Test
 	public void testDateReader() {
-		// Leaf year
+		// Leap year
 		Scanner sc = new Scanner("2016/02/29");
 		String result = EventCreator.dateReader(sc);
 		assertEquals("2016/02/29", result);
