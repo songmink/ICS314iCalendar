@@ -405,7 +405,7 @@ public class EventCreator {
 	/**
 	 * Geo data option
 	 */
-	private static boolean makeOptional(Scanner sc, String prompt) {
+	public static boolean makeOptional(Scanner sc, String prompt) {
 		String option;
 		do {
 			System.out.println("Would you like to " + prompt + "?");
