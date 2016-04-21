@@ -9,6 +9,13 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+/**
+ * ICS 314 Spring 2016 iCalendar project
+ * 
+ * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
+ *  Due date: 04/29/2016
+ */
+
 public class InsertComment {
 
 	public static void main(String[] args) throws IOException {

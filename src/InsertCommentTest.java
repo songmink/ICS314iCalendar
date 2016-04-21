@@ -3,10 +3,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * @author Lucas
+ * ICS 314 Spring 2016 iCalendar project
+ * 
+ * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
+ *  Due date: 04/29/2016
  */
+
 public class InsertCommentTest {
 
+	// TODO I01. event sort test
 	@Test
 	public void testSort() {
 		String[][] events = new String[2][2];
@@ -25,7 +30,7 @@ public class InsertCommentTest {
 		assertEquals(array[0], 1);
 	}
 
-	/* Created by Songmin Kim */
+	// TODO I02. great distance test
 	@Test
 	public void calDistanceTest() {
 		double[] lat1 = { -45, 0, 45 };
