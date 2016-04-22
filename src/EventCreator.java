@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -11,41 +12,20 @@ import java.util.Scanner;
  * ICS 314 Spring 2016 iCalendar project
  * 
  * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
- *  Due date: 02/25/2016
- *  @author Songmin Kim
+ *  Due date: 04/29/2016
  */
-
-/***********************************************************************************/
-/*                                                                                 */
-/* Please write "name comment" 										   */
-/*                                                                                 */
-/***********************************************************************************/
 
 /**
  * iCalendar event creator
  */
 public class EventCreator {
-	public EventCreator() {
 
-	}
-
-	/* Start or end calendar properties */
+	/* Static variables for ICS category. */
 	private static String begin = "BEGIN:";
 	private static String end = "END:";
-
-	/* Program version and product id */
-	private static String version = "VERSION:2.0";
+	private static String version = "VERSION:2.0"; /* Version 2.0 */
 	private static String prodId = "PRODID:-//University of Hawaii at Manoa//ICS314 iCalendar Team Cinco Spring.2016//EN";
-
-	/* Auto input */
 	private static String eCreated = "CREATED:"; /* Event created date time */
-	// private static String eLastMod = "LAST-MODIFIED:"; /* Event last modify date time */
-	// private static String dtStamp = "DTSTAMP:"; /* Calendar date time stamp */
-	// private static String cUid = "UID:"; /* Calendar uid */
-
-	/*
-	 * Possible user input data 13 items
-	 */
 	private static String cScale = "CALSCALE:"; /* Calendar scale */
 	private static String cName = "X-WR-CALNAME:"; /* Calendar name */
 	private static String cDesc = "X-WR-CALDESC:"; /* Calendar description */
@@ -54,97 +34,139 @@ public class EventCreator {
 	private static String dtEnd = "DTEND:"; /* Event end date time */
 	private static String eMethod = "METHOD:"; /* Event method */
 	private static String eDesc = "DESCRIPTION:"; /* Event description */
-	// private static String eSeq = "SEQUENCE:"; /* Event sequence */
-	// private static String eStatus ="STATUS:"; /* Event status */
 	private static String eSummary = "SUMMARY:"; /* Event summary */
 	private static String eLocation = "LOCATION:"; /* Event location */
 	private static String eGeo = "GEO:"; /* Event geo location */
 	private static String eClass = "CLASS:"; /* Event Classification */
-	// private static String eComment = "COMMENT:"; /* Event comment(distance) */
-	private static boolean GeoCheck = true; /* Check if geo field to see if user sets*/
-
-
 	private static String fileName = "NewEvent"; /* default file name */
+
+	/* geo Field option */
+	private static boolean GeoCheck = true;
 
 	/**
 	 * Main
-	 * 
-	 * @param args
-	 *            ignore
 	 */
 	public static void main(String[] args) {
 		System.out.print("Event creator start.\n");
 
-		/*
-		 * static but can modify from user input
-		 */
+		/* Default value for some static variables */
 		cScale += "GREGORIAN";
 		dtZone += "HONOLULU";
 		eMethod += "PUBLIC";
-		// eStatus += "";
-		// eGeo += "";
 
-		/* open scanner */
+		/* Open scanner for reading user input */
 		Scanner sc = new Scanner(System.in);
 
-		/*
-		 * Input user calendar data
-		 */
+		/* Input user calendar data */
 		System.out.print("Welcome, this is the Event Creator program by Team Cinco");
 		System.out.println("Some things you should know:");
 		System.out.println("Timezone is set to HONOLULU by default");
 		System.out.println("Description can only be one line by default");
 		System.out.println("Filenames are by default the date and time of the file created");
 		System.out.println("Geographic position is optional");
-		
-		System.out.print("Enter calendar name(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		cName += stringReader(sc);
-		System.out.print("Enter calendar description(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		cDesc += stringReader(sc);
-		System.out.print("Enter event summary for title(Empty not allowed):");
-		/* Read user data from command line using "stringReader" function */
-		eSummary += stringReader(sc);
 
-		/*
-		 * Event start date and time reader
-		 */
-		System.out.print("Enter start ");
-		/* Read user data from command line using "dateReader" function */
-		String startDate = dateReader(sc);
-		/* Remove separators */
-		dtStart += startDate.replace("/", "");
-		/* add date and time separator "T" */
-		dtStart += "T";
-		/* event start time */
-		System.out.print("Enter start");
-		/* Read user data from command line using "timeReader" function */
-		String startTime = timeReader(sc);
-		/* Remove time separator */
-		dtStart += startTime.replace(":", "");
-		/* add UTC mark "Z" */
-		//dtStart += "Z";
+		// Loop checker
+		boolean loop = true;
 
-		/*
-		 * Event end date and time reader
-		 */
-		System.out.print("Enter end ");
-		/* Read user data from command line using "dateReader" function */
-		String endDate = dateReader(sc);
-		/* Remove separators */
-		dtEnd += endDate.replace("/", "");
-		/* add date and time separator "T" */
-		dtEnd += "T";
-		System.out.print("Enter end ");
-		/* Read user data from command line using "timeReader" function */
-		String endTime = timeReader(sc);
-		/* Remove time separator */
-		dtEnd += endTime.replace(":", "");
-		/* add UTC mark "Z" */
-		//dtEnd += "Z";
-		
-		
+		/* Read calendar name using stringReader */
+		while (loop) {
+			System.out.print("1. Please, Enter calendar name (Empty not allowed):");
+			try {
+				cName += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Calendar name should exist.");
+			}
+		}
+
+		// Refresh loop for new loop
+		loop = true;
+		/* Read calendar description using stringReader */
+		while (loop) {
+			System.out.print("2. Please, enter calendar description (Empty not allowed):");
+			try {
+				cDesc += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Calendar description should exist.");
+			}
+		}
+
+		// loop refresh for new loop
+		loop = true;
+		/* Read event summary using stringReader */
+		while (loop) {
+			System.out.print("3. Please, enter event summary for title Empty not allowed):");
+			try {
+				eSummary += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: event summary should exist.");
+			}
+		}
+
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event start date */
+		String startDate = null;
+		while (loop) {
+			System.out.print("Please, enter event start date (format:yyyy/mm/dd):");
+			try {
+				startDate = dateReader(sc);
+				dtStart += startDate.replace("/", ""); // Remove separators
+				dtStart += "T"; // add date and time separator "T"
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The date is invalid.");
+			}
+		}
+
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event start time */
+		String startTime = null;
+		while (loop) {
+			System.out.print("Please, enter event start time (24 hr format - HH:mm:ss)");
+			try {
+				startTime = timeReader(sc);
+				dtStart += startTime.replace(":",
+						""); /* Remove time separator */
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.print("\n*** Warning: The time is invalid.");
+			}
+		}
+
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event end date */
+		String endDate = null;
+		while (loop) {
+			System.out.print("Please, enter event end date (format: yyyy/mm/dd):");
+			try {
+				endDate = dateReader(sc);
+				dtEnd += endDate.replace("/", ""); // Remove separators
+				dtEnd += "T"; // Add date and time separator "T"
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The date is invalid.");
+			}
+		}
+
+		// Refresh loop for new loop
+		loop = true;
+		/* Read event end time */
+		String endTime = null;
+		while (loop) {
+			System.out.print("Please, enter event end time(24 hr format - hh:mm:ss");
+			try {
+				endTime = timeReader(sc);
+				dtEnd += endTime.replace(":", ""); // Remove time separator
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: The time is invalid.");
+			}
+		}
 
 		/*
 		 * Event validation check
@@ -165,220 +187,98 @@ public class EventCreator {
 			System.exit(1);
 		}
 
-		/* Read user input text for information using "stringReader" function */
-		System.out.print("Enter event description(Empty not allowed):");
-		eDesc += stringReader(sc);
+		// Refresh loop for new loop
+		loop = true;
+		/* Read Description */
+		while (loop) {
+			System.out.print("Please, enter event description(Empty not allowed):");
+			try {
+				eDesc += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Empty is not allowed.");
+			}
+		}
 
-		/* Read user input integer for sequence using "intReader" function */
-		// System.out.print("Enter the Sequence(Empty not allowed):");
-		/*
-		 * Read user input using "intReader" function, intReader reads only
-		 * integer value
-		 */
-		// eSeq += intReader();
+		// Refresh loop for new loop
+		loop = true;
+		/* Read class */
+		while (loop) {
+			System.out.print("Please, enter event class(p for private, c for confidencial, empty for public):");
+			try {
+				eClass += classReader(sc);
+				loop = false;
+			} catch (InputMismatchException e) {
+				System.out.println("\n*** Warning: Input mismatch.");
+			}
+		}
 
-		// TODO select one of them
-		/*
-		 * print statements are contained in class reader
-		 */
-		eClass += classReader(sc);
+		// Refresh loop for new loop
+		loop = true;
+		/* Read location */
+		while (loop) {
+			System.out.print("Enter Event Location(Empty not allowed):");
+			try {
+				eLocation += stringReader(sc);
+				loop = false;
+			} catch (NullPointerException e) {
+				System.out.println("\n*** Warning: Empty is not allowed.");
+			}
+		}
 
-		/*
-		 * Second version
-		 */
-		// System.out.print("Enter Class(p for private, c for confidential,
-		// empty enter for public");
-		// eClass += classReader2(sc);
+		GeoCheck = makeOptional(sc, "add the geographical position of your event");
+		if (GeoCheck) {
+			System.out.print("Geographical position of your event.\n");
+			// Refresh loop for new loop
+			loop = true;
+			/* Read latitude */
+			Float lat = null;
+			while (loop) {
+				System.out.print("Please, enter your event location logitude (Range: -90.0 <= x <= 90.0)");
+				try {
+					lat = latReader(sc);
+					loop = false;
+				} catch (InputMismatchException e) {
+					System.out.println("\n*** Warning: Range is invalid.");
+				}
+			}
 
-		/*
-		 * Reader user input text for information using "stringReader" function
-		 */
-		System.out.print("Enter Event Location(Empty not allowed):");
-		eLocation += stringReader(sc);
-
-		/*
-		 * Read two float numbers from command line and return combined string
-		 * the value
-		 */
-		GeoCheck = makeOptional(sc,"add the geographical position of your event");
-		if (GeoCheck){
-		System.out.print("Geographical position of your event.\n");
-		eGeo += floatReader(sc);
+			// Refresh loop for new loop
+			loop = true;
+			/* Read longitude */
+			Float lon = null;
+			while (loop) {
+				System.out.print("Please, enter your event location latitude (Range: -180.0 <= y <= 180.0)");
+				try {
+					lon = lonReader(sc);
+					loop = false;
+				} catch (InputMismatchException e) {
+					System.out.println("\n*** Warning: Range is invalid");
+				}
+			}
+			// Write the geo data on a category
+			eGeo += Float.toString(lat) + ";" + Float.toString(lon);
 		}
 		/*
 		 * Reader user input text for information using "stringReader" function
 		 */
-		System.out.print("Enter Event File Name:");
-		if (stringReader(sc).isEmpty()) {
-			fileName = currentDate();
-		} else {
+
+		try {
+			System.out.print("Please, enter event file name:");
 			fileName = stringReader(sc);
+		} catch (NullPointerException e) {
+			System.out.println(
+					"\n*** Caution: You did not input your event file name! \nCurrent date will be your evnet file name.");
+			fileName = currentDate();
 		}
+
 		/* close the scanner */
 		sc.close();
 
-		/* Get the current date value from system */
+		/* Time stamp */
 		eCreated += currentDate();
-		/*
-		 * Write out ics file with the user input file name the file name will
-		 * be appended the current date time string automatically.
-		 */
-		icsNewEvent(fileName);
 
-		/* Last comment and finish */
-		System.out.print("The " + fileName + " event is created.\n Program End.");
-	}
-
-	/**
-	 * Read string user information from command line
-	 * 
-	 * @return userIn string for user input string data / empty not allowed
-	 */
-	public static String stringReader(Scanner sc) {
-		String userIn = null;
-		Boolean isEmpty = true;
-
-		while (isEmpty) {
-			userIn = sc.nextLine();
-			if (userIn != null) {
-				isEmpty = false;
-			}
-		}
-		return userIn;
-	}
-
-	/**
-	 * Date reader
-	 * 
-	 * @return String date
-	 */
-	public static String dateReader(Scanner sc) {
-		Boolean isEmpty = true;
-		String dateInput = null;
-		while (isEmpty) {
-			System.out.print("event date(yyyy/mm/dd):");
-			dateInput = sc.next();
-
-			if (dateInput != null) {
-				dateInput = dateInput.trim();
-
-				/* Date validation check */
-				if (isValidDate(dateInput)) {
-					isEmpty = false;
-				} else {
-					/* Reset input data */
-					dateInput = null;
-					System.out.print("->>> The date you input is not valid! -\n- Please enter a valid ");
-				}
-			} else {
-				System.out.print("->>> The date you input is not valid! -\n- Please enter the valid ");
-			}
-		}
-		return dateInput;
-	}
-
-	/**
-	 * Time reader
-	 * 
-	 * @return String time with hhmmss format
-	 */
-	public static String timeReader(Scanner sc) {
-		Boolean isEmpty = true;
-		String timeInput = null;
-		while (isEmpty) {
-			sc = new Scanner(System.in);
-			System.out.print("event time(hh:mm:ss):");
-			timeInput = sc.next();
-			if (timeInput != null) {
-				if (isValidTime(timeInput)) {
-					isEmpty = false;
-				} else {
-					timeInput = null;
-					System.out.print("->>> The time you input is not valid! -\n- Please enter a valid ");
-				}
-
-			} else {
-				System.out.print("->>> The time you input is not valid! -\n- Plaese enter a valid");
-			}
-		}
-		return timeInput;
-	}
-
-	/**
-	 * Read integer user information from command line
-	 * 
-	 * @return userIn integer for user input integer data / empty not allowed
-	 */
-	public static int intReader(Scanner sc) {
-		int userIn = 1;
-		Boolean isEmpty = true;
-
-		while (isEmpty) {
-			/* read only integer */
-			while (!sc.hasNextInt()) {
-				userIn = sc.nextInt();
-			}
-		}
-		return userIn;
-	}
-
-	/*
-	 * float number reader from command line
-	 */
-	public static String floatReader(Scanner sc) {
-		/* sample Geographic data POST */
-		/* https://www.google.com/maps/@21.2973964,-157.8162139,19.55z */
-		/* Default geographical position */
-		float lat = 21.2973964f;
-		float lon = -157.8162139f;
-
-		Boolean checker = false;
-		while (!checker) {
-			try {
-				System.out.print("Enter your event location latitude as a float number.(Range:-90.0 to 90.0)");
-				lat = sc.nextFloat();
-				checker = true;
-
-				/* For latitude: -90 < lon < 90 */
-				if (-90.0 > lat || lat > 90.0) {
-					System.out.print("->>> Please, ");
-					checker = false;
-				}
-			} catch (Exception InputMismatchException) {
-				System.out.print("->>> The latitude should be a float number. Please, ");
-				checker = false;
-				sc.next();
-			}
-		}
-
-		checker = false;
-		while (!checker) {
-			try {
-				System.out.print("Enter your event location longitude as a float number.(Ragen:-180.0 to 180.0)");
-				lon = sc.nextFloat();
-				checker = true;
-
-				/* For Longitude: -180 < lat < 180 */
-				if (-180.0 > lon || lon > 180.0) {
-					System.out.print("->>> Please, ");
-					checker = false;
-				}
-			} catch (Exception InputMissmatchException) {
-				System.out.print("->>> The logitude should be a float number. Please, ");
-				checker = false;
-				sc.next();
-			}
-		}
-		/* Change the latitude and the longitude and combine */
-
-		String latLon = Float.toString(lat) + ";" + Float.toString(lon);
-		return latLon;
-	}
-
-	/**
-	 * Write a new event
-	 */
-	public static void icsNewEvent(String fileName) {
+		/* Write a file */
 		StringBuilder b = new StringBuilder();
 		b.append(fileName);
 		b.append(".ics");
@@ -393,8 +293,6 @@ public class EventCreator {
 			/* Static DO NOT EARASE! */
 			bw.write(begin + "VCALENDAR" + "\n");
 
-			// Each item can be disabled
-			// Unused item should be disabled
 			bw.write(prodId + "\n");
 			bw.write(version + "\n");
 			bw.write(cScale + "\n");
@@ -405,29 +303,18 @@ public class EventCreator {
 
 			/* Static */
 			bw.write(begin + "VEVENT" + "\n");
-
-			// Each item can be disabled
-			// Unused item should be disabled
-			// bw.write(cUid + "\n");
 			bw.write(dtStart + "\n");
 			bw.write(dtEnd + "\n");
 			bw.write(eDesc + "\n");
 			bw.write(eLocation + "\n");
 			bw.write(eSummary + "\n");
 			bw.write(eCreated + "\n");
-			// bw.write(eSeq + "\n");
-			// bw.write(eStatus + "\n");
-			// bw.write(dtStamp + "\n");
-			// bw.write(eLastMod + "\n");
 
-			/* added two new properties */
-			if (GeoCheck){
-			bw.write(eGeo + "\n");
-			};
+			/* geo option */
+			if (GeoCheck) {
+				bw.write(eGeo + "\n");
+			}
 			bw.write(eClass + "\n");
-
-			/* added one new property */
-			// bw.write(eComment + "\n");
 
 			/* Static DO NOT EARASE! */
 			bw.write(end + "VEVENT" + "\n");
@@ -435,33 +322,104 @@ public class EventCreator {
 
 			bw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("\n*** Warning: File write error.");
 		}
 
+		/* Last comment and finish */
+		System.out.print("*** The " + fileName + " event is created. ***\n Thank you.");
 	}
 
-    /**
-     * 
-     */
-     private static boolean makeOptional(Scanner sc, String prompt) {
-    	 String option;
-    	 do {
- 			System.out.println("Would you like to " + prompt + "?");
- 			System.out.print("Enter 1 for Yes\n" + "Enter 2 for No\n");
- 			System.out.print("Response: ");
- 			option = sc.nextLine().trim();
- 		} while (!option.equals("1") && !option.equals("2") );
+	/**
+	 * Read string user information from command line
+	 * 
+	 * @return userIn string for user input string data
+	 */
+	public static String stringReader(Scanner sc) {
+		String userIn = null;
+		userIn = sc.nextLine();
 
+		// If data is null, throw the null pointer error.
+		if (userIn.isEmpty()) {
+			throw new NullPointerException("Error: Null data is not allowed.");
+		}
+		return userIn;
+	}
 
- 		if (option.equals("1") ) {
- 			return true;
- 		} 
- 		else {
- 			return false;
- 		}
-     }
-    	 
-	
+	/**
+	 * Date reader
+	 * 
+	 * @param sc
+	 * @return string or throw an error
+	 */
+	public static String dateReader(Scanner sc) {
+		String dateInput = null;
+		dateInput = sc.nextLine();
+		dateInput = dateInput.trim();
+
+		if (dateInput.isEmpty() || !isValidDate(dateInput)) {
+			throw new InputMismatchException("Error: Invalid date.");
+		}
+		return dateInput;
+	}
+
+	/**
+	 * Time reader
+	 * 
+	 * @return String time with hh:mm:ss format
+	 */
+	public static String timeReader(Scanner sc) {
+		String timeInput = null;
+		timeInput = sc.nextLine();
+
+		if (timeInput.isEmpty() || !isValidTime(timeInput)) {
+			throw new InputMismatchException("Error: Empty or invalid time.");
+		}
+		return timeInput;
+	}
+
+	/**
+	 * Latitude reader
+	 */
+	public static float latReader(Scanner sc) {
+		float lat = 21.2973964f;
+		lat = sc.nextFloat();
+		if (lat < -90.0 || 90.0 < lat) {
+			throw new InputMismatchException("Error: Out of range.");
+		}
+		return lat;
+	}
+
+	/**
+	 * Longitude reader
+	 */
+	public static float lonReader(Scanner sc) {
+		float lot = -157.8162139f;
+		lot = sc.nextFloat();
+		if (lot < -180.0 || 180.0 < lot) {
+			throw new InputMismatchException("Error: Out of range.");
+		}
+		return lot;
+	}
+
+	/**
+	 * Geo data option
+	 */
+	public static boolean makeOptional(Scanner sc, String prompt) {
+		String option;
+		do {
+			System.out.println("Would you like to " + prompt + "?");
+			System.out.print("Enter 1 for Yes\n" + "Enter 2 for No\n");
+			System.out.print("Response: ");
+			option = sc.nextLine().trim();
+		} while (!option.equals("1") && !option.equals("2"));
+
+		if (option.equals("1")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Date validation
 	 * 
@@ -530,7 +488,7 @@ public class EventCreator {
 		int m = Integer.parseInt(hms[1], 10);
 		int s = Integer.parseInt(hms[2], 10);
 		/* check the time validation */
-		if (0 > h || 23 < h || 0 > m || 59 < m || 0 <s || 59 < s) {
+		if (0 > h || 23 < h || 0 > m || 59 < m || 0 < s || 59 < s) {
 			return false;
 		}
 		return true;
@@ -604,81 +562,24 @@ public class EventCreator {
 	}
 
 	/**
-	 * Prompts the user to choose a privacy setting Numbers are used to
-	 * represent options because it is easier to type and verify
-	 * 
-	 * @param scan
-	 * @return privacy (1) returns "PUBLIC" if 1 is entered (2) returns
-	 *         "PRIVATE" if 2 is entered (3) returns "CONFIDENTIAL" if 3 is
-	 *         entered
-	 */
-	public static String classReader(Scanner scan) {
-		String privacy;
-
-		do {
-			System.out.println("Enter Privacy Settings:");
-			System.out.print("Enter 1 for PUBLIC\n" + "Enter 2 for PRIVATE\n" + "Enter 3 for CONFIDENTIAL\n");
-			System.out.print("Response: ");
-			privacy = scan.nextLine().trim();
-		} while (!isValidClass(privacy));
-
-		int option = Integer.parseInt(privacy);
-
-		if (option == 1) {
-			System.out.println("Your privacy was set as PUBLIC");
-			return "PUBLIC";
-		} else if (option == 2) {
-			System.out.println("Your privacy was set as PRIVATE");
-			return "PRIVATE";
-		} else {
-			System.out.println("Your privacy was set as CONFIDENTIAL");
-			return "CONFIDENTIAL";
-		}
-	}
-
-	/**
-	 * Given a String, it checks if 1,2, or 3 was entered.
-	 * 
-	 * @param privacy
-	 * @return (1) true if 1,2, or 3 were given as input (2) false otherwise
-	 */
-	private static boolean isValidClass(String privacy) {
-		if (privacy.equals("1") || privacy.equals("2") || privacy.equals("3") || privacy.isEmpty()) {
-
-			return true;
-		} else {
-			System.out.println("- The setting you input is not valid! -");
-			return false;
-		}
-	}
-
-	/**
 	 * Simple class input
 	 * 
 	 * @param sc
 	 *            for user input
 	 * @return PUBLIC, PRIVATE, or CONFIDENTIAL, default is PUBLIC
 	 */
-	public String classReader2(Scanner sc) {
+	public static String classReader(Scanner sc) {
 		String userIn;
-		boolean loop = false;
 
-		while (!loop) {
-			userIn = sc.nextLine();
-			if (userIn.isEmpty()) {
-				loop = true;
-				return "PUBLIC";
-			} else if (userIn.equals("p")) {
-				loop = true;
-				return "PRIVATE";
-			} else if (userIn.equals("c")) {
-				loop = true;
-				return "CONFIDENTIAL";
-			} else {
-				loop = false;
-				System.out.print("Please, Enter p, c, or empty");
-			}
+		userIn = sc.nextLine();
+		if (userIn.isEmpty()) {
+			return "PUBLIC";
+		} else if (userIn.equals("p")) {
+			return "PRIVATE";
+		} else if (userIn.equals("c")) {
+			return "CONFIDENTIAL";
+		} else {
+			throw new InputMismatchException("Error: Input mismatch.");
 		}
-		return "PUBLIC";
 	}
 }
