@@ -20,12 +20,9 @@ public class InsertCommentTest {
 		events[0][0] = "DTSTART:11111111T1111";
 		events[1][0] = "DTSTART:11111111T1110";
 		events[1][1] = "GEO:";
-		String[] fileNames = new String[2];
 
-		fileNames[0] = "abc.ics";
-		fileNames[1] = "abcde.ics";
 		int[] array;
-		array = InsertComment.getSorted(events, fileNames, 2);
+		array = InsertComment.getSorted(events, 2);
 		// System.out.println(array[0]);
 		assertEquals(array[0], 1);
 	}
