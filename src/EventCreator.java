@@ -129,10 +129,13 @@ public class EventCreator {
 			System.out.print("Please, enter event start time (24 hr format - HH:mm:ss)");
 			try {
 				startTime = timeReader(sc);
+				
 				dtStart += startTime.replace(":",
 						""); /* Remove time separator */
 				loop = false;
 			} catch (InputMismatchException e) {
+				startTime = "";
+				System.err.println(e.getMessage() );
 				System.out.print("\n*** Warning: The time is invalid.");
 			}
 		}
@@ -488,7 +491,7 @@ public class EventCreator {
 		int m = Integer.parseInt(hms[1], 10);
 		int s = Integer.parseInt(hms[2], 10);
 		/* check the time validation */
-		if (0 > h || 23 < h || 0 > m || 59 < m || 0 < s || 59 < s) {
+		if (0 > h || 23 < h || 0 > m || 59 < m || 0 > s || 59 < s) {
 			return false;
 		}
 		return true;
