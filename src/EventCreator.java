@@ -109,11 +109,12 @@ public class EventCreator {
 		loop = true;
 		/* Read event start date */
 		String startDate = null;
+		String subString;
 		while (loop) {
 			System.out.print("Please, enter event start date (format:yyyy/mm/dd):");
 			try {
 				startDate = dateReader(sc);
-				dtStart += startDate.replace("/", ""); // Remove separators
+                dtStart += completeString(startDate,"/");
 				dtStart += "T"; // add date and time separator "T"
 				loop = false;
 			} catch (InputMismatchException e) {
@@ -330,6 +331,25 @@ public class EventCreator {
 
 		/* Last comment and finish */
 		System.out.print("*** The " + fileName + " event is created. ***\n Thank you.");
+	}
+    
+	/**
+	 * Given a delimiter it adjusts the given string to create a correct string for 
+	 * both DTSTART and DTEND
+	 * @param string the string to edit
+	 * @param delimiter the character or String that separates information in this case it is either '/' or ':'
+	 * @return
+	 */
+	private static String completeString(String string, String delimiter) {
+		String stringToReturn;
+		String subString;
+		
+		stringToReturn = appendZero(4,string.substring(0,string.indexOf(delimiter) ) );
+		subString= string.substring(string.indexOf(delimiter)+1, string.length() );
+		stringToReturn += appendZero(2,subString.substring(0,string.indexOf(delimiter) ) );
+		subString= subString.substring(string.indexOf(delimiter)+1, subString.length() );
+		stringToReturn += appendZero(2,subString.substring(0,string.indexOf(delimiter) ) );
+		return stringToReturn;
 	}
 
 	/**
@@ -564,6 +584,19 @@ public class EventCreator {
 		return date;
 	}
 
+	 /**
+	  * Appends zeros to beginning of String until it meets the specified length
+	  * @param length the length that the string will become
+	  * @param string the string to append 0's to
+	  * @return
+	  */
+	 public static String appendZero(int length, String string) {
+		 while(string.length() < length) {
+			 string = "0" + string;
+		 }
+		 return string;
+	 }
+	
 	/**
 	 * Simple class input
 	 * 
