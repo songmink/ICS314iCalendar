@@ -488,7 +488,7 @@ public class EventCreator {
 		int m = Integer.parseInt(hms[1], 10);
 		int s = Integer.parseInt(hms[2], 10);
 		/* check the time validation */
-		if (0 > h || 23 < h || 0 > m || 59 < m || 0 < s || 59 < s) {
+		if (h < 0 || 23 < h || m < 0 || 59 < m || s < 0 || 59 < s) {
 			return false;
 		}
 		return true;
