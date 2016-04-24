@@ -25,7 +25,7 @@ public class InsertCommentTest {
 		fileNames[0] = "abc.ics";
 		fileNames[1] = "abcde.ics";
 		int[] array;
-		array = InsertComment.getSorted(events, fileNames, 2);
+		array = eventSort.getSorted(events, fileNames, 2);
 		// System.out.println(array[0]);
 		assertEquals(array[0], 1);
 	}
@@ -42,7 +42,7 @@ public class InsertCommentTest {
 		for (int i = 0; i < lat1.length; i++) {
 			Boolean max = false;
 			Boolean min = false;
-			double result = InsertComment.calDistance(lat1[i], lon1[i], lat2[i], lon2[i]);
+			double result = greatDistance.cal(lat1[i], lon1[i], lat2[i], lon2[i]);
 			int r = (int) result;
 			// System.out.println("Distance:" + r);
 			if (r < (answer[i] + 5)) {

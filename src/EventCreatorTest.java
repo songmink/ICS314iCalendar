@@ -14,12 +14,12 @@ public class EventCreatorTest {
 		String[] iData = { "a", "ab", "abc" };
 		for (int i = 0; i < iData.length; i++) {
 			Scanner sc = new Scanner(iData[i]);
-			String result = EventCreator.stringReader(sc);
+			String result = inputReader.string(sc);
 			assertEquals(iData[i], result);
 		}
 		try {
 			Scanner sc = new Scanner("");
-			EventCreator.stringReader(sc);
+			inputReader.string(sc);
 		} catch (Exception e) {
 			// Nothing means there is an exception
 		}
@@ -30,7 +30,7 @@ public class EventCreatorTest {
 	public void testDateReader() {
 		// Leap year
 		Scanner sc = new Scanner("2016/02/29");
-		String result = EventCreator.dateReader(sc);
+		String result = inputReader.date(sc);
 		assertEquals("2016/02/29", result);
 	}
 
@@ -42,10 +42,10 @@ public class EventCreatorTest {
 		// Wrong time
 		String[] wtime = { "24:00:00", "25:01:00", "-12:00:00" };
 		for (int i = 0; i < ctime.length; i++) {
-			assertTrue(EventCreator.isValidTime(ctime[i]));
+			assertTrue(isValid.calTime(ctime[i]));
 		}
 		for (int i = 0; i < wtime.length; i++) {
-			assertFalse(EventCreator.isValidTime(wtime[i]));
+			assertFalse(isValid.calTime(wtime[i]));
 		}
 	}
 
@@ -59,10 +59,10 @@ public class EventCreatorTest {
 		String[] wdate = { "2016/04/31", "2016/06/31", "2016/09/31", "2016/11/31", "2015/02/29", "2100/02/29" };
 
 		for (int i = 0; i < cdate.length; i++) {
-			assertTrue(EventCreator.isValidDate(cdate[i]));
+			assertTrue(isValid.calDate(cdate[i]));
 		}
 		for (int i = 0; i < wdate.length; i++) {
-			assertFalse(EventCreator.isValidDate(wdate[i]));
+			assertFalse(isValid.calDate(wdate[i]));
 		}
 	}
 
@@ -74,10 +74,10 @@ public class EventCreatorTest {
 		// Wrong time
 		String[] wtime = { "24:00:00", "25:01:00", "-12:00:00" };
 		for (int i = 0; i < ctime.length; i++) {
-			assertTrue(EventCreator.isValidTime(ctime[i]));
+			assertTrue(isValid.calTime(ctime[i]));
 		}
 		for (int i = 0; i < wtime.length; i++) {
-			assertFalse(EventCreator.isValidTime(wtime[i]));
+			assertFalse(isValid.calTime(wtime[i]));
 		}
 	}
 
@@ -91,11 +91,11 @@ public class EventCreatorTest {
 				{ "2016/01/02", "12:00:00", "2016/01/01", "15:00:00" } };
 
 		for (int i = 0; i < cevent.length; i++) {
-			assertTrue(EventCreator.isValidEvent(cevent[i][0], cevent[i][1], cevent[i][2], cevent[i][3]));
+			assertTrue(isValid.calEvent(cevent[i][0], cevent[i][1], cevent[i][2], cevent[i][3]));
 		}
 
 		for (int i = 0; i < wevent.length; i++) {
-			assertFalse(EventCreator.isValidEvent(wevent[i][0], wevent[i][1], wevent[i][2], wevent[i][3]));
+			assertFalse(isValid.calEvent(wevent[i][0], wevent[i][1], wevent[i][2], wevent[i][3]));
 		}
 	}
 
@@ -103,15 +103,15 @@ public class EventCreatorTest {
 	@Test
 	public void testClassReader() {
 		Scanner sc = new Scanner("\n");
-		String result = EventCreator.classReader(sc);
+		String result = inputReader.calClass(sc);
 		assertEquals("PUBLIC", result);
 
 		sc = new Scanner("p");
-		result = EventCreator.classReader(sc);
+		result = inputReader.calClass(sc);
 		assertEquals("PRIVATE", result);
 
 		sc = new Scanner("c");
-		result = EventCreator.classReader(sc);
+		result = inputReader.calClass(sc);
 		assertEquals("CONFIDENTIAL", result);
 		try {
 			sc = new Scanner("fafaf");
@@ -127,7 +127,7 @@ public class EventCreatorTest {
 		for (int i = 0; i < testLat.length; i++) {
 			try {
 				Scanner sc = new Scanner(testLat[i]);
-				float result = EventCreator.latReader(sc);
+				float result = inputReader.lat(sc);
 				assertEquals(testLat[i], result);
 			} catch (Exception e) {
 				// Nothing means there is an exception
@@ -142,7 +142,7 @@ public class EventCreatorTest {
 		for (int i = 0; i < testLon.length; i++) {
 			try {
 				Scanner sc = new Scanner(testLon[i]);
-				float result = EventCreator.lonReader(sc);
+				float result = inputReader.lon(sc);
 				assertEquals(testLon[i], result);
 			} catch (Exception e) {
 				// Nothing means there is an exception
@@ -154,11 +154,11 @@ public class EventCreatorTest {
 	@Test
 	public void testMakeOptional() {
 		Scanner sc = new Scanner("1");
-		boolean result = EventCreator.makeOptional(sc, "add the geographical position of your event");
+		boolean result = inputReader.makeOptional(sc, "add the geographical position of your event");
 		assertEquals(true, result);
 
 		sc = new Scanner("2");
-		result = EventCreator.makeOptional(sc, "add the geographical position of your event");
+		result = inputReader.makeOptional(sc, "add the geographical position of your event");
 		assertEquals(false, result);
 	}
 
