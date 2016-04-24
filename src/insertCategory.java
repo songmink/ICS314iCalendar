@@ -3,37 +3,44 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * ICS 314 Spring 2016 iCalendar project
+ * 
+ * Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim Due date:
+ * 04/29/2016
+ */
+
 public class insertCategory {
 	public static void comment(String fileName, String[] icsData, double distance) {
 		StringBuilder b = new StringBuilder();
 		b.append(fileName);
 
 		for (int i = 0; i < icsData.length; i++) {
-			if(icsData[i] == null){
+			if (icsData[i] == null) {
 				break;
 			}
 			System.out.println(icsData[i]);
-	        if(icsData[i] != null && icsData[i].length() >= 4 && icsData[i].substring(0,4).equals("GEO:")  ) {
-				System.out.print("COMMENT:" + distance +"\n");
+			if (icsData[i] != null && icsData[i].length() >= 4 && icsData[i].substring(0, 4).equals("GEO:")) {
+				System.out.print("COMMENT:" + distance + "\n");
 			}
 		}
-		
+
 		try {
 			File file = new File(b.toString());
-			if(!file.exists()) {
+			if (!file.exists()) {
 				file.createNewFile();
 			}
 			FileWriter fw = new FileWriter(file.getAbsolutePath());
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (int i = 0; i < icsData.length; i++) {
-				if(icsData[i] == null){
+				if (icsData[i] == null) {
 					break;
 				}
-				
+
 				// update previous COMMENT data
-				if( !(icsData[i].length() >= 8 && icsData[i].substring(0,8).equals("COMMENT:") )  ) {
+				if (!(icsData[i].length() >= 8 && icsData[i].substring(0, 8).equals("COMMENT:"))) {
 					bw.write(icsData[i] + "\n");
-	    	        if(icsData[i].length() >= 4 && icsData[i].substring(0,4).equals("GEO:")  ) {
+					if (icsData[i].length() >= 4 && icsData[i].substring(0, 4).equals("GEO:")) {
 						bw.write("COMMENT:" + distance + "\n");
 					}
 				}

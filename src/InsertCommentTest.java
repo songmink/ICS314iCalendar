@@ -5,8 +5,8 @@ import org.junit.Test;
 /**
  * ICS 314 Spring 2016 iCalendar project
  * 
- * 	Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim
- *  Due date: 04/29/2016
+ * Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim Due date:
+ * 04/29/2016
  */
 
 public class InsertCommentTest {

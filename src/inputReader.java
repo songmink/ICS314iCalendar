@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * ICS 314 Spring 2016 iCalendar project
+ * 
+ * Team Cinco: Lucas Calabrese, Nicolas Winters, Song Min Kim Due date:
+ * 04/29/2016
+ */
+
 public class inputReader {
 	/**
 	 * Read string user information from command line
@@ -20,6 +27,7 @@ public class inputReader {
 		}
 		return userIn;
 	}
+
 	/**
 	 * Date reader
 	 * 
@@ -75,7 +83,7 @@ public class inputReader {
 		}
 		return lot;
 	}
-	
+
 	/**
 	 * Geo data option
 	 */
@@ -94,7 +102,7 @@ public class inputReader {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Simple class input
 	 * 
@@ -116,28 +124,28 @@ public class inputReader {
 			throw new InputMismatchException("Error: Input mismatch.");
 		}
 	}
-	
+
 	/**
 	 * Event file reader
-	 * @param string filename
+	 * 
+	 * @param string
+	 *            filename
 	 * @return string array
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	
+
 	public static String[] event(String filename) throws IOException {
 		FileReader fr = new FileReader(filename);
 		BufferedReader br = new BufferedReader(fr);
 		String line;
 		String cat[] = new String[20];
 		int i = 0;
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			cat[i] = line;
 			i++;
 		}
 		br.close();
 		return cat;
 	}
-
-	
 
 }
