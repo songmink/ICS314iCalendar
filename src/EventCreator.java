@@ -124,15 +124,15 @@ public class EventCreator {
 
 		// Refresh loop for new loop
 		loop = true;
-		/* Read event start time */
+		/* Read event 
+		 * start time */
 		String startTime = null;
 		while (loop) {
 			System.out.print("Please, enter event start time (24 hr format - HH:mm:ss)");
 			try {
 				startTime = timeReader(sc);
 				
-				dtStart += startTime.replace(":",
-						""); /* Remove time separator */
+				dtStart += completeString(startTime,":");
 				loop = false;
 			} catch (InputMismatchException e) {
 				startTime = "";
@@ -149,7 +149,7 @@ public class EventCreator {
 			System.out.print("Please, enter event end date (format: yyyy/mm/dd):");
 			try {
 				endDate = dateReader(sc);
-				dtEnd += endDate.replace("/", ""); // Remove separators
+				dtEnd += completeString(endDate,"/"); 
 				dtEnd += "T"; // Add date and time separator "T"
 				loop = false;
 			} catch (InputMismatchException e) {
@@ -165,7 +165,7 @@ public class EventCreator {
 			System.out.print("Please, enter event end time(24 hr format - hh:mm:ss");
 			try {
 				endTime = timeReader(sc);
-				dtEnd += endTime.replace(":", ""); // Remove time separator
+				dtEnd += completeString(endTime,":");  // Remove time separator
 				loop = false;
 			} catch (InputMismatchException e) {
 				System.out.println("\n*** Warning: The time is invalid.");
@@ -343,8 +343,29 @@ public class EventCreator {
 	private static String completeString(String string, String delimiter) {
 		String stringToReturn;
 		String subString;
+		int dateOrHour = 0;
 		
-		stringToReturn = appendZero(4,string.substring(0,string.indexOf(delimiter) ) );
+		if(delimiter.equals("/")) {
+			//if zeros do not need to be added it returns the current string without delimiters
+			if(string.length() >= 8) {
+				return string.replace("/", "");
+			}
+			dateOrHour = 4;
+		}
+		else {
+			if(delimiter.equals(":")) {
+				//if zeros do not need to be added it returns the current string without delimiters
+				if(string.length() >= 6) {
+					return string.replace(":", "");
+				}
+				dateOrHour = 2;
+			}
+			else {
+				return string;
+			}
+		}
+		
+		stringToReturn = appendZero(dateOrHour,string.substring(0,string.indexOf(delimiter) ) );
 		subString= string.substring(string.indexOf(delimiter)+1, string.length() );
 		stringToReturn += appendZero(2,subString.substring(0,string.indexOf(delimiter) ) );
 		subString= subString.substring(string.indexOf(delimiter)+1, subString.length() );
@@ -455,9 +476,17 @@ public class EventCreator {
 		if (ymd.length != 3) {
 			return false;
 		}
-		int y = Integer.parseInt(ymd[0], 10);
-		int m = Integer.parseInt(ymd[1], 10);
-		int d = Integer.parseInt(ymd[2], 10);
+		int y = -1;
+		int m = -1;
+		int d = -1;
+		try {
+			y = Integer.parseInt(ymd[0], 10);
+			m = Integer.parseInt(ymd[1], 10);
+			d = Integer.parseInt(ymd[2], 10);
+		}
+		catch(Exception e) {
+			return false;
+		}
 
 		/* year and */
 		if (y < 0) {
@@ -506,10 +535,17 @@ public class EventCreator {
 		if (hms.length != 3) {
 			return false;
 		}
-
-		int h = Integer.parseInt(hms[0], 10);
-		int m = Integer.parseInt(hms[1], 10);
-		int s = Integer.parseInt(hms[2], 10);
+		int h = -1;
+        int m = -1;
+        int s = -1;
+        try {
+			 h = Integer.parseInt(hms[0], 10);
+			 m = Integer.parseInt(hms[1], 10);
+			 s = Integer.parseInt(hms[2], 10);
+        }
+        catch(Exception e) {
+        	return false;
+        }
 		/* check the time validation */
 		if (0 > h || 23 < h || 0 > m || 59 < m || 0 > s || 59 < s) {
 			return false;
