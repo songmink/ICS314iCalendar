@@ -109,7 +109,6 @@ public class EventCreator {
 		loop = true;
 		/* Read event start date */
 		String startDate = null;
-		String subString;
 		while (loop) {
 			System.out.print("Please, enter event start date (format:yyyy/mm/dd):");
 			try {
@@ -236,7 +235,7 @@ public class EventCreator {
 			// Refresh loop for new loop
 			loop = true;
 			/* Read latitude */
-			Float lat = null;
+			String lat = null;
 			while (loop) {
 				System.out.print("Please, enter your event location logitude (Range: -90.0 <= x <= 90.0)");
 				try {
@@ -250,7 +249,7 @@ public class EventCreator {
 			// Refresh loop for new loop
 			loop = true;
 			/* Read longitude */
-			Float lon = null;
+			String lon = null;
 			while (loop) {
 				System.out.print("Please, enter your event location latitude (Range: -180.0 <= y <= 180.0)");
 				try {
@@ -261,7 +260,7 @@ public class EventCreator {
 				}
 			}
 			// Write the geo data on a category
-			eGeo += Float.toString(lat) + ";" + Float.toString(lon);
+			eGeo += lat + ";" + lon;
 		}
 		/*
 		 * Reader user input text for information using "stringReader" function
@@ -430,7 +429,7 @@ public class EventCreator {
 	 * @param sc a Scanner object
 	 * @return the latitude as a float
 	 */
-	public static float latReader(Scanner sc) {
+	public static String latReader(Scanner sc) {
 		String lats = "21.2973964f";
 		lats = sc.nextLine();
 		float lat = 21.2973964f;
@@ -443,7 +442,7 @@ public class EventCreator {
 		if (lat < -90.0 || 90.0 < lat) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
-		return lat;
+		return lats;
 	}
 
 	/**
@@ -452,7 +451,7 @@ public class EventCreator {
 	 * @param sc a Scanner object
 	 * @return the longitude as a float
 	 */
-	public static float lonReader(Scanner sc) {
+	public static String lonReader(Scanner sc) {
 		String lots = "";
 		lots = sc.nextLine();
 		float lot = -157.8162139f;
@@ -465,7 +464,7 @@ public class EventCreator {
 		if (lot < -180.0 || 180.0 < lot) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
-		return lot;
+		return lots;
 	}
 
     /**

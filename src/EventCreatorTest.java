@@ -123,11 +123,11 @@ public class EventCreatorTest {
 	// TODO E08. latitude reader test
 	@Test
 	public void testLatReader() {
-		String testLat[] = { "-91.0f", "-90.0f", "-45.5f", "0.0f", "30.0f", "60.123456f", " 90.0f", "90.1f" };
+		String testLat[] = { "-91.0", "-90.0", "-45.5", "0.0", "30.0", "60.123456", " 90.0", "90.1" };
 		for (int i = 0; i < testLat.length; i++) {
 			try {
 				Scanner sc = new Scanner(testLat[i]);
-				float result = EventCreator.latReader(sc);
+				String result = EventCreator.latReader(sc);
 				assertEquals(testLat[i], result);
 			} catch (Exception e) {
 				// Nothing means there is an exception
@@ -138,11 +138,11 @@ public class EventCreatorTest {
 	// TODO E09. longitude reader test
 	@Test
 	public void testLonReader() {
-		String testLon[] = { "-191.0f", "-180.0f", "-78.6f", "0.0f", "66.0f", "60.123456f", " 180.0f", "180.1f" };
+		String testLon[] = { "-191.0", "-180.0", "-78.6", "0.0", "66.0", "60.123456", " 180.0", "180.1" };
 		for (int i = 0; i < testLon.length; i++) {
 			try {
 				Scanner sc = new Scanner(testLon[i]);
-				float result = EventCreator.lonReader(sc);
+				String result = EventCreator.lonReader(sc);
 				assertEquals(testLon[i], result);
 			} catch (Exception e) {
 				// Nothing means there is an exception
