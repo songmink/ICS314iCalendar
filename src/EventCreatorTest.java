@@ -40,7 +40,7 @@ public class EventCreatorTest {
 		// Correct time
 		String[] ctime = { "00:00:00", "01:59:00", "12:00:00" };
 		// Wrong time
-		String[] wtime = { "24:00:00", "25:01:00", "-12:00:00" };
+		String[] wtime = { "24:00:00", "25:01:00", "-12:00:00", "a/a/a", "a" };
 		for (int i = 0; i < ctime.length; i++) {
 			assertTrue(EventCreator.isValidTime(ctime[i]));
 		}
@@ -56,7 +56,7 @@ public class EventCreatorTest {
 		String[] cdate = { "2016/01/31", "2016/02/29", "2016/03/31", "2016/05/31", "2016/07/31", "2016/08/31",
 				"2016/10/31", "2016/12/31", "2400/02/29" };
 		// Wrong date
-		String[] wdate = { "2016/04/31", "2016/06/31", "2016/09/31", "2016/11/31", "2015/02/29", "2100/02/29" };
+		String[] wdate = { "2016/04/31", "2016/06/31", "2016/09/31", "2016/11/31", "2015/02/29", "2100/02/29", "a/a/a", "a" };
 
 		for (int i = 0; i < cdate.length; i++) {
 			assertTrue(EventCreator.isValidDate(cdate[i]));
