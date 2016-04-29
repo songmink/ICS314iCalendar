@@ -338,7 +338,7 @@ public class EventCreator {
 	 * both DTSTART and DTEND
 	 * @param string the string to edit
 	 * @param delimiter the character or String that separates information in this case it is either '/' or ':'
-	 * @return
+	 * @return The update String
 	 */
 	private static String completeString(String string, String delimiter) {
 		String stringToReturn;
@@ -375,7 +375,7 @@ public class EventCreator {
 
 	/**
 	 * Read string user information from command line
-	 * 
+	 * @param sc a Scanner object
 	 * @return userIn string for user input string data
 	 */
 	public static String stringReader(Scanner sc) {
@@ -391,9 +391,10 @@ public class EventCreator {
 
 	/**
 	 * Date reader
-	 * 
-	 * @param sc
-	 * @return string or throw an error
+	 * Prompts the user for a date
+	 * @param sc a scanner object
+	 * @return (1) string the date entered by the user represented as a String
+	 *         (2) If the date entered is invalid it will throw an error
 	 */
 	public static String dateReader(Scanner sc) {
 		String dateInput = null;
@@ -408,8 +409,10 @@ public class EventCreator {
 
 	/**
 	 * Time reader
-	 * 
-	 * @return String time with hh:mm:ss format
+	 * Prompts the user for a time
+	 * @param sc a scanner object
+	 * @return (1) String time with hh:mm:ss format
+	 *         (2) If the date entered is invalid it will throw an error
 	 */
 	public static String timeReader(Scanner sc) {
 		String timeInput = null;
@@ -423,10 +426,20 @@ public class EventCreator {
 
 	/**
 	 * Latitude reader
+	 * Prompts the user for latitude and checks if it is within a correct range
+	 * @param sc a Scanner object
+	 * @return the latitude as a float
 	 */
 	public static float latReader(Scanner sc) {
+		String lats = "21.2973964f";
+		lats = sc.nextLine();
 		float lat = 21.2973964f;
-		lat = sc.nextFloat();
+		try {
+	        lat = Float.parseFloat(lats);
+		}
+		catch(Exception e) {
+			throw new InputMismatchException("Error: Incorrect Input");
+		}
 		if (lat < -90.0 || 90.0 < lat) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
@@ -435,19 +448,34 @@ public class EventCreator {
 
 	/**
 	 * Longitude reader
+	 * Prompts the user for longitude and checks if it is within a correct range
+	 * @param sc a Scanner object
+	 * @return the longitude as a float
 	 */
 	public static float lonReader(Scanner sc) {
+		String lots = "";
+		lots = sc.nextLine();
 		float lot = -157.8162139f;
-		lot = sc.nextFloat();
+		try {
+			lot = Float.parseFloat(lots);
+		}
+		catch(Exception e) {
+			throw new InputMismatchException("Error: Incorrect input");
+		}
 		if (lot < -180.0 || 180.0 < lot) {
 			throw new InputMismatchException("Error: Out of range.");
 		}
 		return lot;
 	}
 
-	/**
-	 * Geo data option
-	 */
+    /**
+     * Used to make certain fields optional
+     * @param sc a Scanner object
+     * @param prompt A string containing what the user might want to do
+     * for example: "add you geological location" 
+     * @return (1) true if the user wants to use the option and enters 1
+     *         (2) false if the user does not want to use the option and enters 2
+     */
 	public static boolean makeOptional(Scanner sc, String prompt) {
 		String option;
 		do {
@@ -466,7 +494,9 @@ public class EventCreator {
 
 	/**
 	 * Date validation
-	 * 
+	 * Checks if the date entered by the user is 
+	 * valid for a correct event file
+	 * @param date the date entered represented as a String
 	 * @return true if valid otherwise false
 	 */
 	public static boolean isValidDate(String date) {
@@ -525,7 +555,9 @@ public class EventCreator {
 
 	/**
 	 * Time validation
-	 * 
+	 * Checks if the time entered by the user is 
+	 * valid for a correct event file 
+	 * @param t the time entered represented as a String
 	 * @return boolean true if valid otherwise false
 	 */
 	public static boolean isValidTime(String t) {
@@ -553,11 +585,15 @@ public class EventCreator {
 		return true;
 	}
 
-	/**
-	 * Compare start and end date time
-	 * 
-	 * @return Boolean false if not valid otherwise true
-	 */
+    /**
+     * Compare start and end date time
+	 * If the end is after the start it returns true
+     * @param sd the start date as a String
+     * @param st the start time as a String
+     * @param ed the end date as a string
+     * @param et the end date as a string
+     * @return Boolean false if not valid otherwise true
+     */
 	public static boolean isValidEvent(String sd, String st, String ed, String et) {
 
 		/* date check */
@@ -609,7 +645,7 @@ public class EventCreator {
 	/**
 	 * Current date
 	 * 
-	 * @return String yyyymmdd
+	 * @return String yyyymmdd the current date
 	 */
 
 	public static String currentDate() {
@@ -624,7 +660,7 @@ public class EventCreator {
 	  * Appends zeros to beginning of String until it meets the specified length
 	  * @param length the length that the string will become
 	  * @param string the string to append 0's to
-	  * @return
+	  * @return the string with the entered length
 	  */
 	 public static String appendZero(int length, String string) {
 		 while(string.length() < length) {
@@ -635,9 +671,12 @@ public class EventCreator {
 	
 	/**
 	 * Simple class input
-	 * 
-	 * @param sc
-	 *            for user input
+	 * If p is entered, the privacy setting will be set to 
+	 * private, if c is entered it will be set to confidential,
+	 * if nothing is entered it will set it to public. public is the 
+	 * default value, that will be set if the user decides not to
+	 * set the privacy setting. 
+	 * @param sc a scanner object
 	 * @return PUBLIC, PRIVATE, or CONFIDENTIAL, default is PUBLIC
 	 */
 	public static String classReader(Scanner sc) {
