@@ -17,8 +17,8 @@ public class InsertCommentTest {
 		String[][] events = new String[2][2];
 
 		events[0][1] = "GEO:";
-		events[0][0] = "DTSTART:11111111T1111";
-		events[1][0] = "DTSTART:11111111T1110";
+		events[0][0] = "DTSTART:11111111T111100";
+		events[1][0] = "DTSTART:11111111T111000";
 		events[1][1] = "GEO:";
 
 		int[] array;

@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class EventCreatorTest {
 
-	// TODO E01. string reader test
+	//string reader test
 	@Test
 	public void testStringReader() {
 		String[] iData = { "a", "ab", "abc" };
@@ -25,7 +25,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E02. date reader test
+	//date reader test
 	@Test
 	public void testDateReader() {
 		// Leap year
@@ -34,7 +34,7 @@ public class EventCreatorTest {
 		assertEquals("2016/02/29", result);
 	}
 
-	// TODO E03. time reader test
+	//time reader test
 	@Test
 	public void testTimeReader() {
 		// Correct time
@@ -49,7 +49,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E04. date validation test
+	//date validation test
 	@Test
 	public void testIsVaildDate() {
 		// Correct dates
@@ -66,7 +66,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E05. time validation test
+	//time validation test
 	@Test
 	public void testIsVaildTime() {
 		// Correct time
@@ -81,7 +81,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E06. event validation test
+	//event validation test
 	@Test
 	public void testIsValidEvent() {
 		// Correct event
@@ -99,7 +99,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E07. class reader test
+	//class reader test
 	@Test
 	public void testClassReader() {
 		Scanner sc = new Scanner("\n");
@@ -120,7 +120,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E08. latitude reader test
+	//latitude reader test
 	@Test
 	public void testLatReader() {
 		String testLat[] = { "-91.0", "-90.0", "-45.5", "0.0", "30.0", "60.123456", " 90.0", "90.1" };
@@ -135,7 +135,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E09. longitude reader test
+	//longitude reader test
 	@Test
 	public void testLonReader() {
 		String testLon[] = { "-191.0", "-180.0", "-78.6", "0.0", "66.0", "60.123456", " 180.0", "180.1" };
@@ -150,7 +150,7 @@ public class EventCreatorTest {
 		}
 	}
 
-	// TODO E10. geo data input option
+	//geo data input option
 	@Test
 	public void testMakeOptional() {
 		Scanner sc = new Scanner("1");
@@ -161,8 +161,20 @@ public class EventCreatorTest {
 		result = EventCreator.makeOptional(sc, "add the geographical position of your event");
 		assertEquals(false, result);
 	}
+	
+	//test a function that appends 0's to the correct locations for dates and times
+	@Test
+	public void testCompleteString() {
+		String testDateandTime[] = 
+			{ "1/1/1", "1111/11/11", "1:1:1", "11:11:11"};
+		assertEquals(EventCreator.completeString(testDateandTime[0], "/"),"00010101");
+		assertEquals(EventCreator.completeString(testDateandTime[1], "/"),"11111111");
+		assertEquals(EventCreator.completeString(testDateandTime[2], ":"),"010101");
+		assertEquals(EventCreator.completeString(testDateandTime[3], ":"),"111111");
+	}
 
-	// TODO E11. current date
+	//current date
+	@Test
 	public void testCurrentDate() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd/HHmmss");
 		String result = EventCreator.currentDate();
